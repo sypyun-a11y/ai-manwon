@@ -13,10 +13,10 @@ canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;po
 .reveal.visible{opacity:1;transform:translateY(0);}
 
 /* ── 타이머 바 ── */
-.timer-bar{position:sticky;top:0;z-index:100;background:var(--lime);border-bottom:none;padding:9px 24px;display:flex;align-items:center;justify-content:space-between;}
-.timer-bar .left-label{font-size:12px;color:var(--black);font-weight:700;}
-.timer-bar .timer-count{font-size:17px;font-weight:700;color:var(--black);letter-spacing:2px;font-variant-numeric:tabular-nums;}
-.timer-bar .right-label{font-size:12px;color:var(--black);opacity:0.7;}
+.timer-bar{position:sticky;top:0;z-index:100;background:var(--black);border-bottom:1px solid #2a2a2a;padding:9px 24px;display:flex;align-items:center;justify-content:space-between;}
+.timer-bar .left-label{font-size:12px;color:var(--lime);font-weight:700;}
+.timer-bar .timer-count{font-size:17px;font-weight:700;color:var(--lime);letter-spacing:2px;font-variant-numeric:tabular-nums;}
+.timer-bar .right-label{font-size:12px;color:var(--lime);opacity:0.7;}
 
 /* ── 히어로 ── */
 .hero-section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:80px 24px 64px;text-align:center;}
@@ -243,10 +243,10 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 .final-cta .fc-btn{background:var(--lime);color:var(--black);font-size:20px;font-weight:800;padding:20px 72px;border-radius:14px;border:none;cursor:pointer;}
 
 /* ── 플로팅 CTA ── */
-.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--lime);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;}
-.sticky-cta .sc-left strong{font-size:21px;font-weight:800;color:var(--black);}
-.sticky-cta .sc-left .sc-sub{font-size:15px;margin-left:8px;color:var(--black);opacity:0.8;font-weight:600;}
-.sticky-cta .sc-btn{background:var(--black);color:var(--white);font-size:16px;font-weight:700;padding:11px 26px;border-radius:8px;border:none;cursor:pointer;}
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--lime);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;}
+.sticky-cta .sc-left strong{font-size:15px;font-weight:800;color:var(--black);}
+.sticky-cta .sc-left .sc-sub{font-size:12px;margin-left:6px;color:var(--black);opacity:0.8;font-weight:600;}
+.sticky-cta .sc-btn{background:var(--black);color:var(--white);font-size:14px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
 .cta-drawer{position:fixed;bottom:0;left:0;right:0;z-index:199;background:#111;border-top:2px solid var(--lime);padding:20px 24px 90px;display:none;flex-direction:column;gap:12px;}
 .cta-drawer.open{display:flex;}
 .cta-drawer-title{font-size:13px;color:#888;margin-bottom:4px;text-align:center;}
@@ -366,10 +366,10 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 .section-white .faq-q::before { color:#7c4dff !important; }
 .section-white .faq-a { color:#555 !important; }
 
-/* ── 네온 반짝 애니메이션 ── */
+/* ── 네온 반짝 애니메이션 (비활성) ── */
 @keyframes neonFlicker {
   0%,19%,21%,23%,25%,54%,56%,100% {
-    text-shadow: 0 0 6px #000, 0 0 10px #000;
+    text-shadow: none;
     color: var(--black);
   }
   20%,24%,55% {
@@ -382,7 +382,7 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
   50%      { opacity:0.85; text-shadow: 0 0 4px rgba(0,0,0,0.2); }
 }
 .neon-text {
-  animation: neonFlicker 4s infinite, neonPulse 2s ease-in-out infinite;
+  animation: none;
 }
 </style>
 </head>
