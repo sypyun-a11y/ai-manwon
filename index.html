@@ -237,11 +237,10 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 .faq-a{font-size:14px;color:#bbb;line-height:1.8;padding-left:24px;}
 
 /* ── 최종 CTA ── */
-.final-cta{background:var(--lime);border-radius:20px;padding:60px 32px;text-align:center;}
-.final-cta h2{font-size:48px;font-weight:900;color:var(--black);line-height:1.2;margin-bottom:16px;}
-.final-cta h2 .big{font-size:60px;display:block;}
-.final-cta p{font-size:18px;color:rgba(0,0,0,0.6);margin-bottom:32px;}
-.final-cta .fc-btn{background:var(--black);color:var(--white);font-size:18px;font-weight:700;padding:18px 56px;border-radius:12px;border:none;cursor:pointer;}
+.final-cta{background:transparent;border-radius:0;padding:60px 0 40px;text-align:center;}
+.final-cta .fc-eyebrow{font-size:20px;font-style:italic;color:#888;margin-bottom:24px;letter-spacing:0.5px;}
+.final-cta h2{font-size:52px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:40px;}
+.final-cta .fc-btn{background:var(--lime);color:var(--black);font-size:20px;font-weight:800;padding:20px 72px;border-radius:14px;border:none;cursor:pointer;}
 
 /* ── 플로팅 CTA ── */
 .sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--lime);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;}
@@ -813,9 +812,9 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 <!-- ⑯ 최종 CTA -->
 <section style="padding-bottom:32px;">
   <div class="final-cta reveal">
-    <h2><span class="big">아이디어만</span>있으면 됩니다</h2>
-    <p>코딩은 AI가, 결과물은 당신이</p>
-    <button class="fc-btn" onclick="toggleDrawer()">1기 신청하기 →</button>
+    <p class="fc-eyebrow">무한한 공간, 저 너머로.</p>
+    <h2>지금, 시작할<br>준비가 됐나요?</h2>
+    <button class="fc-btn" onclick="toggleDrawer()">신청하기</button>
   </div>
 </section>
 
