@@ -245,8 +245,8 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:48px 2
 
 /* ── 플로팅 CTA ── */
 .sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--lime);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;}
-.sticky-cta .sc-left strong{font-size:18px;font-weight:800;color:var(--black);}
-.sticky-cta .sc-left span{font-size:13px;margin-left:8px;color:var(--black);opacity:0.7;}
+.sticky-cta .sc-left strong{font-size:21px;font-weight:800;color:var(--black);}
+.sticky-cta .sc-left .sc-sub{font-size:15px;margin-left:8px;color:var(--black);opacity:0.8;font-weight:600;}
 .sticky-cta .sc-btn{background:var(--black);color:var(--white);font-size:16px;font-weight:700;padding:11px 26px;border-radius:8px;border:none;cursor:pointer;}
 .cta-drawer{position:fixed;bottom:0;left:0;right:0;z-index:199;background:#111;border-top:2px solid var(--lime);padding:20px 24px 90px;display:none;flex-direction:column;gap:12px;}
 .cta-drawer.open{display:flex;}
@@ -366,13 +366,32 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:48px 2
 .section-white .faq-q { color:#0d0d0d !important; }
 .section-white .faq-q::before { color:#7c4dff !important; }
 .section-white .faq-a { color:#555 !important; }
+
+/* ── 네온 반짝 애니메이션 ── */
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {
+    text-shadow: 0 0 6px #000, 0 0 10px #000;
+    color: var(--black);
+  }
+  20%,24%,55% {
+    text-shadow: none;
+    color: rgba(0,0,0,0.6);
+  }
+}
+@keyframes neonPulse {
+  0%,100% { opacity:1; text-shadow: 0 0 8px rgba(0,0,0,0.4), 0 0 16px rgba(0,0,0,0.2); }
+  50%      { opacity:0.85; text-shadow: 0 0 4px rgba(0,0,0,0.2); }
+}
+.neon-text {
+  animation: neonFlicker 4s infinite, neonPulse 2s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
 <canvas id="particles"></canvas>
 
 <div class="timer-bar">
-  <span class="left-label">⚡ 1기 모집 마감까지</span>
+  <span class="left-label">⚡ 타임어택</span>
   <span class="timer-count" id="countdown">00 : 00 : 00 : 00</span>
   <span class="right-label">남았습니다</span>
 </div>
@@ -805,7 +824,7 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:48px 2
 
 <!-- 플로팅 CTA -->
 <div class="sticky-cta" onclick="toggleDrawer()">
-  <div class="sc-left"><strong>🚀 AI 만원클럽 1기</strong><span>5/18 개강 · 모집중</span></div>
+  <div class="sc-left"><strong class="neon-text">🚀 AI 만원클럽 1기</strong><span class="sc-sub">5/15 개강 · 모집중</span></div>
   <button class="sc-btn">신청하기 ↑</button>
 </div>
 <div class="cta-drawer" id="ctaDrawer">
