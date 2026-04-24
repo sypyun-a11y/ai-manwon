@@ -157,27 +157,36 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 </div>
 
 <script>
-// URL에서 option 파라미터 읽기
+// ============================================
+// 설정값 (결제 링크 받으면 여기만 수정하세요)
+// ============================================
+const PAYMENT_URLS = {
+  basic: '#',   // AI 만원클럽 결제 링크
+  plus:  '#'    // AI 만원클럽 입문반 결제 링크
+};
+
+// 구글 시트 연동 (Apps Script 웹앱 URL)
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwZ6fbO8P8CMQJjHk1z-vzxr4fDufEhwGUsjOYcXYhWyNi_GZWrcgLyhV96RCMFMHze/exec';
+
+// ============================================
+
 const params = new URLSearchParams(window.location.search);
 let selectedProductOption = params.get('option') || 'basic';
 let currentStep = 1;
 let selectedClaude = -1;
 
-const PAYMENT_URLS = { basic: '#', plus: '#' };
+const CLAUDE_LABELS = ['처음이에요', '써본 적 있어요', '다양하게 해봤어요'];
 
-// 초기화
 window.onload = function(){
   document.getElementById('optionBadgeText').textContent =
-    selectedProductOption === 'plus' ? 'AI 만원클럽 입문' : 'AI 만원클럽';
+    selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽';
   setupStep1Validation();
 };
 
-// 스텝1 입력 감지
 function setupStep1Validation(){
   ['inputName','inputPhone','inputEmail'].forEach(id=>{
     document.getElementById(id).addEventListener('input', checkStep1);
   });
-  // 전화번호 자동 하이픈
   document.getElementById('inputPhone').addEventListener('input', function(){
     let v = this.value.replace(/\D/g,'');
     if(v.length>3 && v.length<=7) v = v.slice(0,3)+'-'+v.slice(3);
@@ -196,30 +205,27 @@ function checkStep1(){
   document.getElementById('btnNext').disabled = !(name && phoneOk && emailOk);
 }
 
-// 클로드코드 선택
 function selectClaude(idx){
   selectedClaude = idx;
   document.querySelectorAll('.claude-opt').forEach((el,i)=>{
     el.classList.toggle('selected', i===idx);
   });
-  // 처음이에요 선택 시 플러스 추천
   const banner = document.getElementById('plusBanner');
   if(idx === 0){
     banner.classList.add('show');
     selectedProductOption = 'plus';
-    document.getElementById('optionBadgeText').textContent = 'AI 만원클럽 입문';
+    document.getElementById('optionBadgeText').textContent = 'AI 만원클럽 입문반';
   } else {
     banner.classList.remove('show');
   }
   document.getElementById('btnNext').disabled = false;
 }
 
-// 다음 버튼
 function handleNext(){
   if(currentStep === 1){
     goToStep2();
   } else if(currentStep === 2){
-    goToPayment();
+    submitAndPay();
   }
 }
 
@@ -234,13 +240,39 @@ function goToStep2(){
   window.scrollTo(0,0);
 }
 
-function goToPayment(){
-  const url = PAYMENT_URLS[selectedProductOption];
-  if(url && url !== '#'){
-    window.location.href = url;
-  } else {
-    alert('결제 링크 준비 중입니다!\n곧 오픈될 예정이에요 🙏');
-  }
+// 구글 시트에 데이터 전송 후 결제 페이지로 이동
+function submitAndPay(){
+  const btn = document.getElementById('btnNext');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  btn.textContent = '처리 중...';
+
+  const data = {
+    name:     document.getElementById('inputName').value.trim(),
+    phone:    document.getElementById('inputPhone').value.trim(),
+    email:    document.getElementById('inputEmail').value.trim(),
+    option:   selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽',
+    claude:   selectedClaude >= 0 ? CLAUDE_LABELS[selectedClaude] : '-',
+    datetime: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'})
+  };
+
+  // 구글 시트 전송 (실패해도 결제는 진행)
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  }).catch(()=>{}).finally(()=>{
+    const url = PAYMENT_URLS[selectedProductOption];
+    if(url && url !== '#'){
+      window.location.href = url;
+    } else {
+      alert('결제 링크 준비 중입니다!\n곧 오픈될 예정이에요 🙏');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.textContent = '결제하기 →';
+    }
+  });
 }
 </script>
 </body>
