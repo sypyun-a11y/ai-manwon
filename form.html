@@ -38,6 +38,14 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .field input:focus{border-color:var(--lime);}
 .field input::placeholder{color:#444;}
 
+/* 아이디어 인풋 강조 */
+.idea-field{margin-top:32px;background:rgba(200,255,0,0.05);border:1.5px solid rgba(200,255,0,0.25);border-radius:16px;padding:20px;}
+.idea-field .idea-label{font-size:16px;font-weight:900;color:var(--lime);margin-bottom:6px;}
+.idea-field .idea-sub{font-size:13px;color:#777;margin-bottom:14px;line-height:1.5;}
+.idea-field input{width:100%;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;font-size:16px;color:var(--white);outline:none;transition:border-color 0.2s;font-family:inherit;}
+.idea-field input:focus{border-color:var(--lime);}
+.idea-field input::placeholder{color:#444;}
+
 /* 클로드코드 선택 */
 .claude-options{display:flex;flex-direction:column;gap:12px;margin-bottom:8px;}
 .claude-opt{background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:14px;padding:18px 20px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;align-items:flex-start;gap:14px;}
@@ -46,7 +54,10 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .claude-opt .opt-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
 .claude-opt .opt-body{}
 .claude-opt .opt-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;}
-.claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
+
+/* 선택된 상품 뱃지 */
+.option-badge{display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;color:#ccc;margin-bottom:28px;}
+.option-badge .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);}
 
 /* 플러스 추천 배너 */
 .plus-banner{background:rgba(200,255,0,0.08);border:1.5px solid rgba(200,255,0,0.3);border-radius:14px;padding:16px 18px;margin-top:16px;display:none;}
@@ -55,27 +66,24 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .plus-banner .pb-text{font-size:13px;color:#ccc;line-height:1.6;}
 .plus-banner .pb-text strong{color:var(--lime);}
 
-/* 선택된 상품 뱃지 */
-.option-badge{display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;color:#ccc;margin-bottom:28px;}
-.option-badge .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);}
+/* 뒤로가기 버튼 */
+.back-btn{font-size:20px;color:#666;cursor:pointer;background:none;border:none;line-height:1;padding:4px;}
+
+/* opt-desc */
+.claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
 
 /* 하단 버튼 */
 .btn-wrap{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(to top, #0d0d0d 70%, transparent);z-index:50;}
 .btn-next{width:100%;max-width:480px;margin:0 auto;display:block;background:var(--lime);color:var(--black);font-size:17px;font-weight:800;padding:16px;border-radius:14px;border:none;cursor:pointer;transition:opacity 0.2s;}
 .btn-next:disabled{opacity:0.3;cursor:default;}
 .btn-next.loading{opacity:0.6;}
-
-/* 완료 스텝 */
-.complete-wrap{text-align:center;padding-top:40px;}
-.complete-icon{font-size:64px;margin-bottom:24px;}
-.complete-title{font-size:26px;font-weight:900;margin-bottom:12px;}
-.complete-desc{font-size:15px;color:#888;line-height:1.7;}
 </style>
 </head>
 <body>
 
 <!-- 상단 바 -->
 <div class="top-bar">
+  <button class="back-btn" id="backBtn" onclick="goBack()">←</button>
   <div class="logo">AI 만원클럽</div>
   <button class="close-btn" onclick="history.back()">✕</button>
 </div>
@@ -106,14 +114,20 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
       <label>이메일</label>
       <input type="email" id="inputEmail" placeholder="example@email.com" />
     </div>
+
+    <!-- 아이디어 강조 인풋 -->
+    <div class="idea-field">
+      <div class="idea-label">✨ 이 클럽을 왜 신청하셨나요?</div>
+      <div class="idea-sub">한 줄로 자유롭게 적어주세요!</div>
+      <input type="text" id="inputIdea" placeholder="예) AI로 사이드 프로젝트를 만들어보고 싶어서요" maxlength="100" />
+    </div>
   </div>
 
   <!-- 스텝 2: 클로드코드 경험 -->
   <div class="step" id="step2">
     <div class="step-title">클로드코드<br>경험이 있으신가요?</div>
-    <div class="step-desc">경험 수준에 맞는 옵션을 추천해드릴게요.</div>
 
-    <div id="optionBadge" class="option-badge">
+    <div id="optionBadge" class="option-badge" style="margin-top:24px;">
       <div class="badge-dot"></div>
       <span id="optionBadgeText">AI 만원클럽</span>
     </div>
@@ -142,16 +156,10 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
       </div>
     </div>
 
-    <!-- 플러스 추천 배너 -->
+    <!-- 입문반 추천 배너 -->
     <div class="plus-banner" id="plusBanner">
       <div class="pb-icon">💡</div>
-      <div class="pb-text"><strong>AI 만원클럽 입문반을 추천해요!</strong><br>클로드코드 입문자를 위한 온보딩 교육이 포함된 입문반이 더 잘 맞을 것 같아요. 개강 전 3시간 라이브 세션으로 환경 세팅부터 기본 사용법까지 다져드립니다.</div>
-    </div>
-
-    <!-- 만들고 싶은 것 -->
-    <div class="field" id="ideaField" style="margin-top:24px;display:none;">
-      <label>AI로 뭘 만들어보고 싶으세요? ✨</label>
-      <input type="text" id="inputIdea" placeholder="예) 독서 기록 앱, 식단 관리 서비스 등" maxlength="100" />
+      <div class="pb-text"><strong>AI 만원클럽 입문반을 추천해요!</strong><br>클로드코드 입문자를 위한 온보딩 교육이 포함돼 있어요. 개강 전 3시간 라이브 세션으로 환경 세팅부터 기본 사용법까지 다져드려요.</div>
     </div>
   </div>
 
@@ -163,32 +171,44 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 </div>
 
 <script>
-// URL에서 option 파라미터 읽기
-const params = new URLSearchParams(window.location.search);
-let selectedProductOption = params.get('option') || 'basic';
-let currentStep = 1;
-let selectedClaude = -1;
-
 const PAYMENT_URLS = {
-  basic: 'https://academia.spartaclub.kr/payment/1401',  // AI 만원클럽
-  plus:  'https://academia.spartaclub.kr/payment/1400'   // AI 만원클럽 입문반
+  basic: 'https://academia.spartaclub.kr/payment/1401',
+  plus:  'https://academia.spartaclub.kr/payment/1400'
 };
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwZ6fbO8P8CMQJjHk1z-vzxr4fDufEhwGUsjOYcXYhWyNi_GZWrcgLyhV96RCMFMHze/exec';
 const CLAUDE_LABELS = ['처음이에요', '써본 적 있어요', '다양하게 해봤어요'];
 
-// 초기화
+const params = new URLSearchParams(window.location.search);
+const selectedProductOption = params.get('option') || 'basic'; // 고정값 — 변경 안 함
+let currentStep = 1;
+let selectedClaude = -1;
+let savedRowIndex = -1; // 1페이지 저장 후 받은 행 번호
+
 window.onload = function(){
   document.getElementById('optionBadgeText').textContent =
     selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽';
+  document.getElementById('backBtn').style.visibility = 'hidden'; // 1페이지엔 뒤로가기 숨김
   setupStep1Validation();
 };
 
-// 스텝1 입력 감지
+function goBack(){
+  if(currentStep === 2){
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('progressFill').style.width = '50%';
+    document.getElementById('progressLabel').textContent = '1 / 2';
+    document.getElementById('btnNext').textContent = '다음';
+    document.getElementById('btnNext').disabled = false;
+    document.getElementById('backBtn').style.visibility = 'hidden';
+    currentStep = 1;
+    window.scrollTo(0,0);
+  }
+}
+
 function setupStep1Validation(){
   ['inputName','inputPhone','inputEmail'].forEach(id=>{
     document.getElementById(id).addEventListener('input', checkStep1);
   });
-  // 전화번호 자동 하이픈
   document.getElementById('inputPhone').addEventListener('input', function(){
     let v = this.value.replace(/\D/g,'');
     if(v.length>3 && v.length<=7) v = v.slice(0,3)+'-'+v.slice(3);
@@ -207,27 +227,21 @@ function checkStep1(){
   document.getElementById('btnNext').disabled = !(name && phoneOk && emailOk);
 }
 
-// 클로드코드 선택
 function selectClaude(idx){
   selectedClaude = idx;
   document.querySelectorAll('.claude-opt').forEach((el,i)=>{
     el.classList.toggle('selected', i===idx);
   });
-  // 처음이에요 선택 시 플러스 추천
+  // 처음이에요 선택 시 입문반 추천 배너 표시 (옵션값은 변경 안 함)
   const banner = document.getElementById('plusBanner');
   if(idx === 0){
     banner.classList.add('show');
-    selectedProductOption = 'plus';
-    document.getElementById('optionBadgeText').textContent = 'AI 만원클럽 입문반';
   } else {
     banner.classList.remove('show');
   }
-  // 아이디어 인풋 표시
-  document.getElementById('ideaField').style.display = 'block';
   document.getElementById('btnNext').disabled = false;
 }
 
-// 다음 버튼
 function handleNext(){
   if(currentStep === 1){
     goToStep2();
@@ -237,14 +251,38 @@ function handleNext(){
 }
 
 function goToStep2(){
-  document.getElementById('step1').classList.remove('active');
-  document.getElementById('step2').classList.add('active');
-  document.getElementById('progressFill').style.width = '100%';
-  document.getElementById('progressLabel').textContent = '2 / 2';
-  document.getElementById('btnNext').textContent = '결제하기 →';
-  document.getElementById('btnNext').disabled = true;
-  currentStep = 2;
-  window.scrollTo(0,0);
+  // 1페이지 데이터 먼저 시트에 저장
+  const btn = document.getElementById('btnNext');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+
+  const data = {
+    action:   'step1',
+    datetime: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'}),
+    name:     document.getElementById('inputName').value.trim(),
+    phone:    document.getElementById('inputPhone').value.trim(),
+    email:    document.getElementById('inputEmail').value.trim(),
+    option:   selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽',
+    idea:     document.getElementById('inputIdea').value.trim() || '-'
+  };
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  }).then(r=>r.json()).then(res=>{
+    if(res.rowIndex) savedRowIndex = res.rowIndex;
+  }).catch(()=>{}).finally(()=>{
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressLabel').textContent = '2 / 2';
+    btn.textContent = '결제하기 →';
+    btn.disabled = true;
+    document.getElementById('backBtn').style.visibility = 'visible';
+    currentStep = 2;
+    window.scrollTo(0,0);
+  });
 }
 
 function goToPayment(){
@@ -253,18 +291,13 @@ function goToPayment(){
   btn.textContent = '처리 중...';
 
   const data = {
-    name:     document.getElementById('inputName').value.trim(),
-    phone:    document.getElementById('inputPhone').value.trim(),
-    email:    document.getElementById('inputEmail').value.trim(),
-    option:   selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽',
-    claude:   selectedClaude >= 0 ? CLAUDE_LABELS[selectedClaude] : '-',
-    idea:     document.getElementById('inputIdea').value.trim() || '-',
-    datetime: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'})
+    action:   'step2',
+    rowIndex: savedRowIndex,
+    claude:   selectedClaude >= 0 ? CLAUDE_LABELS[selectedClaude] : '-'
   };
 
   fetch(SHEET_URL, {
     method: 'POST',
-    mode: 'no-cors',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   }).catch(()=>{}).finally(()=>{
