@@ -9,21 +9,17 @@
 :root{--lime:#c8ff00;--black:#0d0d0d;--white:#ffffff;}
 body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-height:100vh;}
 
-/* 상단 바 */
 .top-bar{position:sticky;top:0;z-index:100;background:#0d0d0d;border-bottom:1px solid #222;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;max-width:100%;}
 .top-bar .logo{font-size:15px;font-weight:800;color:var(--lime);}
 .top-bar .close-btn{font-size:20px;color:#666;cursor:pointer;background:none;border:none;line-height:1;}
 
-/* 진행 바 */
 .progress-wrap{max-width:480px;margin:0 auto;padding:20px 24px 0;}
 .progress-bar{height:3px;background:#222;border-radius:2px;overflow:hidden;}
 .progress-fill{height:100%;background:var(--lime);border-radius:2px;transition:width 0.4s ease;}
 .progress-label{font-size:12px;color:#555;margin-top:8px;text-align:right;}
 
-/* 메인 컨텐츠 */
 .form-wrap{max-width:480px;margin:0 auto;padding:32px 24px 120px;}
 
-/* 스텝 */
 .step{display:none;}
 .step.active{display:block;}
 
@@ -31,14 +27,12 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .step-title span{color:var(--lime);}
 .step-desc{font-size:14px;color:#888;margin-bottom:36px;line-height:1.6;}
 
-/* 인풋 */
 .field{margin-bottom:20px;}
 .field label{display:block;font-size:13px;font-weight:700;color:#aaa;margin-bottom:8px;}
 .field input{width:100%;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;font-size:16px;color:var(--white);outline:none;transition:border-color 0.2s;font-family:inherit;}
 .field input:focus{border-color:var(--lime);}
 .field input::placeholder{color:#444;}
 
-/* 아이디어 인풋 강조 */
 .idea-field{margin-top:32px;background:rgba(200,255,0,0.05);border:1.5px solid rgba(200,255,0,0.25);border-radius:16px;padding:20px;}
 .idea-field .idea-label{font-size:16px;font-weight:900;color:var(--lime);margin-bottom:6px;}
 .idea-field .idea-sub{font-size:13px;color:#777;margin-bottom:14px;line-height:1.5;}
@@ -46,31 +40,25 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .idea-field input:focus{border-color:var(--lime);}
 .idea-field input::placeholder{color:#444;}
 
-/* 클로드코드 선택 */
 .claude-options{display:flex;flex-direction:column;gap:12px;margin-bottom:8px;}
 .claude-opt{background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:14px;padding:18px 20px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;align-items:flex-start;gap:14px;}
 .claude-opt:active{opacity:0.85;}
 .claude-opt.selected{border-color:var(--lime);background:rgba(200,255,0,0.06);}
 .claude-opt .opt-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
-.claude-opt .opt-body{}
 .claude-opt .opt-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;}
 .claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
 
-/* 선택된 상품 뱃지 */
 .option-badge{display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;color:#ccc;margin-bottom:28px;}
 .option-badge .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);}
 
-/* 플러스 추천 배너 */
 .plus-banner{background:rgba(200,255,0,0.08);border:1.5px solid rgba(200,255,0,0.3);border-radius:14px;padding:16px 18px;margin-top:16px;display:none;}
 .plus-banner.show{display:flex;gap:12px;align-items:flex-start;}
 .plus-banner .pb-icon{font-size:22px;flex-shrink:0;}
 .plus-banner .pb-text{font-size:13px;color:#ccc;line-height:1.6;}
 .plus-banner .pb-text strong{color:var(--lime);}
 
-/* 뒤로가기 버튼 */
 .back-btn{font-size:20px;color:#666;cursor:pointer;background:none;border:none;line-height:1;padding:4px;}
 
-/* 하단 버튼 */
 .btn-wrap{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(to top, #0d0d0d 70%, transparent);z-index:50;}
 .btn-next{width:100%;max-width:480px;margin:0 auto;display:block;background:var(--lime);color:var(--black);font-size:17px;font-weight:800;padding:16px;border-radius:14px;border:none;cursor:pointer;transition:opacity 0.2s;}
 .btn-next:disabled{opacity:0.3;cursor:default;}
@@ -78,23 +66,19 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 </head>
 <body>
 
-<!-- 상단 바 -->
 <div class="top-bar">
   <button class="back-btn" id="backBtn" onclick="goBack()">←</button>
   <div class="logo">AI 만원클럽</div>
   <button class="close-btn" onclick="history.back()">✕</button>
 </div>
 
-<!-- 진행 바 -->
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:50%"></div></div>
   <div class="progress-label" id="progressLabel">1 / 2</div>
 </div>
 
-<!-- 폼 영역 -->
 <div class="form-wrap">
 
-  <!-- 스텝 1: 기본 정보 -->
   <div class="step active" id="step1">
     <div class="step-title">신청 정보를<br>입력해주세요</div>
     <div class="step-desc">해당 정보로 AI 만원클럽 신청 관련 안내를 드려요.</div>
@@ -112,7 +96,6 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
       <input type="email" id="inputEmail" placeholder="example@email.com" />
     </div>
 
-    <!-- 지원동기 강조 인풋 -->
     <div class="idea-field">
       <div class="idea-label">✨ 이 클럽을 왜 신청하셨나요?</div>
       <div class="idea-sub">한 줄로 자유롭게 적어주세요!</div>
@@ -120,7 +103,6 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
     </div>
   </div>
 
-  <!-- 스텝 2: 클로드코드 경험 -->
   <div class="step" id="step2">
     <div class="step-title">클로드코드<br>경험이 있으신가요?</div>
 
@@ -153,7 +135,6 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
       </div>
     </div>
 
-    <!-- 입문반 추천 배너 -->
     <div class="plus-banner" id="plusBanner">
       <div class="pb-icon">💡</div>
       <div class="pb-text"><strong>AI 만원클럽 입문반을 추천해요!</strong><br>클로드코드 입문자를 위한 온보딩 교육이 포함돼 있어요. 개강 전 3시간 라이브 세션으로 환경 세팅부터 기본 사용법까지 다져드려요.</div>
@@ -162,7 +143,6 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 
 </div>
 
-<!-- 하단 버튼 -->
 <div class="btn-wrap">
   <button class="btn-next" id="btnNext" onclick="handleNext()" disabled>다음</button>
 </div>
@@ -230,20 +210,14 @@ function selectClaude(idx){
     el.classList.toggle('selected', i===idx);
   });
   const banner = document.getElementById('plusBanner');
-  if(idx === 0){
-    banner.classList.add('show');
-  } else {
-    banner.classList.remove('show');
-  }
+  if(idx === 0){ banner.classList.add('show'); }
+  else { banner.classList.remove('show'); }
   document.getElementById('btnNext').disabled = false;
 }
 
 function handleNext(){
-  if(currentStep === 1){
-    goToStep2();
-  } else if(currentStep === 2){
-    goToPayment();
-  }
+  if(currentStep === 1){ goToStep2(); }
+  else if(currentStep === 2){ goToPayment(); }
 }
 
 function goToStep2(){
