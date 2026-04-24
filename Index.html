@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 만원클럽 1기 모집</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--lime:#c8ff00;--black:#0d0d0d;--black2:#141414;--black3:#1e1e1e;--black4:#2a2a2a;--white:#ffffff;}
+body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;overflow-x:hidden;}
+canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── 타이머 바 ── */
+.timer-bar{position:sticky;top:0;z-index:100;background:var(--black);border-bottom:1px solid #2a2a2a;padding:9px 24px;display:flex;align-items:center;justify-content:flex-start;gap:10px;}
+.timer-bar .left-label{font-size:12px;color:var(--lime);font-weight:700;}
+.timer-bar .timer-count{font-size:17px;font-weight:700;color:var(--lime);letter-spacing:2px;font-variant-numeric:tabular-nums;}
+.timer-bar .right-label{font-size:12px;color:var(--lime);opacity:0.7;}
+
+/* ── 히어로 ── */
+.hero-section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:80px 24px 64px;text-align:center;}
+.hero-tag{display:inline-block;background:rgba(200,255,0,0.15);color:var(--lime);font-size:14px;font-weight:700;padding:7px 18px;border-radius:20px;margin-bottom:24px;border:1px solid rgba(200,255,0,0.3);letter-spacing:1px;}
+.hero-title{font-size:52px;font-weight:900;line-height:1.15;margin-bottom:18px;color:var(--white);}
+.hero-title .lime{color:var(--lime);}
+.hero-sub{font-size:22px;color:#ccc;margin-bottom:40px;line-height:1.6;font-weight:600;}
+.hero-btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;}
+.btn-white{background:var(--white);color:var(--black);font-size:17px;font-weight:700;padding:15px 40px;border-radius:10px;border:none;cursor:pointer;}
+.hero-recruit{font-size:14px;color:#aaa;margin-top:16px;}
+.btn-lime{background:var(--lime);color:var(--black);font-size:17px;font-weight:800;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;}
+.hero-recruit span{color:var(--lime);font-weight:700;}
+
+/* ── 공통 섹션 ── */
+section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 24px;}
+.section-label{font-size:15px;font-weight:700;color:var(--lime);letter-spacing:2px;margin-bottom:14px;text-transform:uppercase;text-align:center;}
+.section-title{font-size:48px;font-weight:900;margin-bottom:12px;line-height:1.2;color:var(--white);text-align:center;}
+.section-desc{font-size:16px;color:#bbb;margin-bottom:36px;line-height:1.7;text-align:center;}
+
+/* ── 교육 개요 카드 ── */
+.overview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;}
+.overview-card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:16px;padding:22px 16px;text-align:center;}
+.overview-card .ov-icon{font-size:28px;margin-bottom:10px;}
+.overview-card .ov-label{font-size:13px;color:#888;margin-bottom:6px;}
+.overview-card .ov-value{font-size:18px;font-weight:800;color:var(--lime);}
+
+/* ── 그런데 섹션 ── */
+.grunde-section{max-width:100%;background:#111;border-top:1px solid #222;border-bottom:1px solid #222;padding:64px 24px;}
+.grunde-inner{max-width:480px;margin:0 auto;text-align:center;}
+.grunde-title{display:none;}
+.grunde-vibe{font-size:72px;font-weight:900;color:var(--white);line-height:1.1;margin-bottom:8px;letter-spacing:-1px;}
+.grunde-vibe span{color:var(--lime);}
+.grunde-sub{font-size:24px;color:#bbb;margin-bottom:40px;font-weight:600;}
+.grunde-sub strong{color:var(--white);}
+.grunde-flow{display:flex;flex-direction:column;gap:12px;margin-bottom:40px;}
+.grunde-step{background:#1e1e1e;border-radius:16px;padding:18px 20px;text-align:left;border:1px solid #2a2a2a;display:flex;align-items:center;gap:16px;}
+.grunde-step.success{border-left:3px solid var(--lime);}
+.grunde-step.warning{border-left:3px solid #ffb400;}
+.grunde-step.danger{border-left:3px solid #ff6400;}
+.grunde-step.fail{border-left:3px solid #ff3c3c;}
+.grunde-face{width:52px;height:52px;border-radius:50%;border:2px solid #333;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.grunde-step.success .grunde-face{background:rgba(200,255,0,0.1);border-color:rgba(200,255,0,0.3);}
+.grunde-step.warning .grunde-face{background:rgba(255,180,0,0.1);border-color:rgba(255,180,0,0.3);}
+.grunde-step.danger .grunde-face{background:rgba(255,100,0,0.1);border-color:rgba(255,100,0,0.3);}
+.grunde-step.fail .grunde-face{background:rgba(255,60,60,0.1);border-color:rgba(255,60,60,0.3);}
+.grunde-step-text{}
+.grunde-step-label{font-size:17px;font-weight:800;color:var(--white);margin-bottom:3px;}
+.grunde-step-desc{font-size:14px;color:#888;}
+/* 하단 강조 멘트 - 단독 파트 */
+.grunde-caption-block{margin-top:8px;text-align:center;}
+.grunde-caption{font-size:36px;font-weight:900;color:var(--white);line-height:1.5;margin-bottom:28px;}
+.grunde-bottom-msg{display:none;}
+.grunde-bottom-msg p{font-size:34px;font-weight:900;color:var(--black);line-height:1.5;}
+.grunde-bottom-msg span{color:var(--black);text-decoration:underline;text-underline-offset:4px;}
+
+/* ── WHY 섹션 ── */
+.why-intro{text-align:center;padding-bottom:32px;}
+.why-intro .wi-label{font-size:13px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:16px;}
+.why-intro .wi-title{font-size:48px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:14px;}
+.why-intro .wi-desc{font-size:17px;color:#bbb;line-height:1.8;}
+.why-intro .wi-desc strong{color:var(--lime);}
+.why-grid{display:flex;flex-direction:column;gap:14px;}
+.why-card{aspect-ratio:1/1;background:#1a1a1a;border-radius:20px;border:1px solid #2a2a2a;padding:28px;display:flex;flex-direction:column;justify-content:space-between;}
+.why-card-tag{font-size:11px;font-weight:900;color:var(--lime);letter-spacing:2px;}
+.why-card-icon{font-size:52px;line-height:1;}
+.why-card-body h3{font-size:26px;font-weight:900;color:var(--white);line-height:1.3;margin-bottom:10px;}
+.why-card-body p{font-size:17px;color:#ccc;line-height:1.75;}
+
+/* ── 성공사례 ── */
+.cases-intro{text-align:center;padding-bottom:32px;}
+.cases-intro .ci-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:12px;}
+.cases-intro .ci-title{font-size:48px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:10px;}
+.cases-intro .ci-desc{font-size:16px;color:#bbb;line-height:1.7;}
+.cases-grid{display:flex;flex-direction:column;gap:16px;}
+.case-card{background:#1a1a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a2a;}
+.case-news-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #2a2a2a;background:#141414;}
+.case-logo{font-family:Georgia,serif;font-size:14px;font-weight:700;color:#aaa;}
+.case-news-dateline{font-size:11px;color:#555;margin-top:2px;}
+.case-news-tag{font-size:12px;font-weight:800;color:var(--lime);background:rgba(200,255,0,0.1);padding:4px 10px;border-radius:20px;border:1px solid rgba(200,255,0,0.25);white-space:nowrap;}
+.case-news-body{padding:18px 16px;text-align:left;}
+.case-result-badge{display:inline-block;background:rgba(200,255,0,0.15);color:var(--lime);font-size:12px;font-weight:800;padding:4px 12px;border-radius:6px;border:1px solid rgba(200,255,0,0.3);margin-bottom:10px;}
+.case-news-headline{font-size:17px;font-weight:800;color:var(--white);line-height:1.5;margin-bottom:10px;}
+.case-news-headline mark{background:rgba(200,255,0,0.2);color:var(--lime);padding:1px 5px;border-radius:3px;font-style:normal;}
+.case-news-divider{border:none;border-top:1px solid #2a2a2a;margin:10px 0;}
+.case-news-desc{font-size:13px;color:#999;line-height:1.6;margin-bottom:14px;}
+.case-news-profile{display:flex;align-items:center;gap:8px;font-size:12px;color:#888;}
+.case-news-profile strong{color:#ccc;}
+.case-avatar{width:28px;height:28px;border-radius:50%;background:rgba(200,255,0,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1px solid rgba(200,255,0,0.2);}
+
+/* ── 타겟 섹션 ── */
+.target-intro{text-align:center;padding-bottom:32px;}
+.target-intro .ti-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:12px;}
+.target-intro .ti-title{font-size:62px;font-weight:900;color:var(--white);line-height:1.2;}
+.target-rank-list{display:flex;flex-direction:column;gap:14px;}
+.target-rank-item{display:flex;align-items:center;gap:20px;padding:24px 20px;background:#1a1a1a;border-radius:18px;border:1px solid #2a2a2a;text-align:left;min-height:90px;}
+.rank-medal{font-size:34px;flex-shrink:0;}
+.rank-text{font-size:22px;color:#eee;font-weight:600;line-height:1.5;}
+.rank-text span{color:var(--lime);font-weight:900;}
+
+/* ── 진행방식 섹션 ── */
+.how-intro{text-align:center;padding-bottom:40px;}
+.how-intro .hi-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:16px;}
+.how-intro .hi-title{font-size:59px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:16px;}
+.how-intro .hi-desc{font-size:19px;color:#ccc;line-height:1.8;}
+.how-intro .hi-desc strong{color:var(--lime);}
+.how-grid{display:flex;flex-direction:column;gap:14px;}
+.how-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:28px 24px;text-align:left;display:flex;align-items:flex-start;gap:20px;border-left:4px solid var(--lime);}
+.how-card-icon{font-size:40px;flex-shrink:0;margin-top:2px;}
+.how-card-body{}
+.how-card h4{font-size:26px;font-weight:900;color:var(--white);margin-bottom:10px;}
+.how-card p{font-size:18px;color:#ddd;line-height:1.9;}
+.how-tag{display:inline-block;background:rgba(200,255,0,0.1);color:var(--lime);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-top:12px;border:1px solid rgba(200,255,0,0.25);}
+
+/* ── 커리큘럼 섹션 ── */
+.curr-intro{text-align:center;padding-bottom:32px;}
+.curr-intro .ci-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:12px;}
+.curr-intro .ci-title{font-size:56px;font-weight:900;color:var(--white);line-height:1.2;}
+.prog-wrap{display:flex;flex-direction:column;gap:16px;}
+.prog-block{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:18px;padding:28px 24px;text-align:left;}
+.prog-badge{display:inline-block;background:rgba(200,255,0,0.15);color:var(--lime);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(200,255,0,0.3);}
+.prog-block h3{font-size:26px;font-weight:900;margin-bottom:6px;color:var(--white);}
+.prog-hook{font-size:15px;color:var(--lime);font-weight:600;margin-bottom:4px;}
+.prog-sub{font-size:13px;color:#888;margin-bottom:20px;}
+.prog-journey{display:flex;flex-direction:column;gap:0;position:relative;padding-left:20px;border-left:2px solid #333;}
+.journey-step{position:relative;padding:0 0 24px 24px;}
+.journey-step:last-child{padding-bottom:0;}
+.journey-dot{position:absolute;left:-27px;top:4px;width:12px;height:12px;border-radius:50%;background:#333;border:2px solid #555;}
+.journey-dot.active{background:var(--lime);border-color:var(--lime);}
+.journey-week{font-size:11px;color:var(--lime);font-weight:800;letter-spacing:2px;margin-bottom:6px;}
+.journey-content h4{font-size:18px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.journey-content p{font-size:14px;color:#bbb;line-height:1.6;}
+.onboarding-note{display:flex;align-items:center;gap:8px;background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:8px;padding:10px 14px;margin-top:14px;}
+.onboarding-note span{font-size:13px;color:var(--lime);}
+.price-grid{display:flex;flex-direction:column;gap:14px;margin-top:16px;}
+.price-card{background:#141414;border-radius:16px;padding:24px;border:1px solid #2a2a2a;text-align:left;}
+.price-card.featured{border-color:var(--lime);border-width:2px;}
+.price-card .pc-badge{font-size:11px;background:var(--lime);color:var(--black);padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:12px;}
+.price-card h4{font-size:18px;font-weight:800;margin-bottom:6px;color:var(--white);}
+.price-card .pc-price{font-size:30px;font-weight:900;color:var(--lime);margin-bottom:3px;}
+.price-card .pc-original{font-size:13px;color:#555;text-decoration:line-through;margin-bottom:14px;}
+.price-card ul{list-style:none;padding:0;margin-bottom:18px;}
+.price-card ul li{font-size:14px;color:#aaa;padding:6px 0;border-bottom:1px solid #222;display:flex;align-items:center;gap:8px;}
+.price-card ul li::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0;}
+.price-card .pc-btn{width:100%;padding:14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;}
+
+/* ── 브릿지 단독 섹션 ── */
+.bridge-solo-section{max-width:100%;background:#111;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;padding:72px 24px;text-align:center;}
+.bridge-solo-inner{max-width:480px;margin:0 auto;}
+.bs-emoji{font-size:56px;margin-bottom:20px;}
+.bs-title{font-size:53px;font-weight:900;color:var(--white);line-height:1.25;margin-bottom:16px;}
+.bs-title span{color:var(--lime);}
+.bs-desc{font-size:19px;color:#ccc;line-height:1.8;margin-bottom:32px;}
+.bs-desc strong{color:var(--white);}
+.bridge-solo-btn{display:inline-block;background:rgba(200,255,0,0.1);color:var(--lime);font-size:16px;font-weight:700;padding:14px 32px;border-radius:12px;border:1px solid rgba(200,255,0,0.35);cursor:pointer;}
+
+/* ── 위클리 케어 섹션 ── */
+.weekly-care-section{max-width:100%;background:#0d0d0d;border-top:1px solid #1e1e1e;padding:72px 24px;}
+.weekly-care-inner{max-width:480px;margin:0 auto;text-align:center;}
+.care-char-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px;}
+.care-char-label{font-size:18px;color:#bbb;font-weight:600;}
+.weekly-care-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:16px;}
+.weekly-care-title{font-size:56px;font-weight:900;color:var(--white);line-height:1.25;margin-bottom:16px;}
+.weekly-care-title span{color:var(--lime);}
+.weekly-care-sub{font-size:16px;color:#888;margin-bottom:48px;line-height:1.7;}
+.weekly-timeline{display:flex;flex-direction:column;gap:0;position:relative;padding-left:24px;border-left:2px solid #2a2a2a;text-align:left;}
+.weekly-item{position:relative;padding:0 0 28px 28px;}
+.weekly-item:last-child{padding-bottom:0;}
+.weekly-dot{position:absolute;left:-27px;top:6px;width:12px;height:12px;border-radius:50%;background:#2a2a2a;border:2px solid #444;}
+.weekly-dot.on{background:var(--lime);border-color:var(--lime);box-shadow:0 0 8px rgba(200,255,0,0.4);}
+.weekly-week{font-size:11px;color:var(--lime);font-weight:800;letter-spacing:2px;margin-bottom:6px;}
+.weekly-content h4{font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.weekly-content p{font-size:14px;color:#bbb;line-height:1.6;}
+.weekly-badge{display:inline-block;background:rgba(200,255,0,0.1);color:var(--lime);font-size:11px;padding:2px 8px;border-radius:6px;margin-top:6px;font-weight:600;}
+.plus-badge{background:rgba(200,255,0,0.15);color:var(--lime);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid rgba(200,255,0,0.3);margin-left:6px;}
+
+/* ── 수료 후 섹션 ── */
+.output-intro{text-align:center;padding-bottom:40px;}
+.oi-label{font-size:11px;color:var(--lime);font-weight:700;letter-spacing:2px;margin-bottom:16px;}
+.oi-title{font-size:62px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:16px;}
+.oi-desc{font-size:22px;color:#ccc;line-height:1.8;}
+/* 원형 프로세스 */
+.output-circle-wrap{position:relative;width:100%;max-width:360px;height:360px;margin:0 auto 48px;}
+.oc-ring{position:absolute;top:50%;left:50%;width:80%;height:80%;border:1px dashed rgba(200,255,0,0.25);border-radius:50%;transform:translate(-50%,-50%);}
+.oc-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:var(--black);text-align:center;line-height:1.3;z-index:2;}
+.oc-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-50%);}
+.oc-node-icon{width:68px;height:68px;background:#1e1e1e;border:2px solid rgba(200,255,0,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.oc-node-label{font-size:14px;font-weight:900;color:var(--lime);white-space:nowrap;}
+/* output-cards */
+.output-cards{display:flex;flex-direction:column;gap:14px;}
+.output-card{background:#1a1a1a;border-radius:16px;padding:24px 20px;border:1px solid #2a2a2a;display:flex;align-items:flex-start;gap:18px;text-align:left;}
+.output-card .oc-icon{font-size:36px;flex-shrink:0;}
+.output-card h4{font-size:22px;font-weight:900;margin-bottom:8px;color:var(--white);}
+.output-card p{font-size:17px;color:#ddd;line-height:1.8;}
+.output-card .oc-tag{display:inline-block;background:rgba(200,255,0,0.1);color:var(--lime);font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;margin-top:8px;}
+
+/* ── 한정인원 ── */
+.seats-section{background:var(--black2);border-radius:20px;padding:44px 28px;border:1px solid #2a2a2a;text-align:center;}
+.seats-section h2{font-size:32px;font-weight:900;margin-bottom:8px;color:var(--white);}
+.seats-sub{font-size:15px;color:#ccc;margin-bottom:28px;}
+.progress-bar-wrap{background:#1e1e1e;border-radius:100px;height:14px;margin-bottom:10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--lime);border-radius:100px;width:0%;animation:barFill 1.5s ease-out forwards;}
+@keyframes barFill{to{width:73%}}
+.seats-count{font-size:14px;color:#ccc;text-align:left;margin-bottom:28px;}
+.seats-count span{color:var(--lime);font-weight:700;}
+.seats-cta-btn{background:var(--lime);color:var(--black);font-size:17px;font-weight:700;padding:16px 48px;border-radius:10px;border:none;cursor:pointer;}
+
+/* ── 혜택 ── */
+.benefits-grid{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+.benefit-card{background:#1a1a1a;border-radius:18px;padding:28px 24px;border:1px solid #2a2a2a;display:flex;align-items:flex-start;gap:20px;text-align:left;}
+.benefit-card .bc-icon{font-size:36px;flex-shrink:0;}
+.benefit-card h4{font-size:20px;font-weight:800;margin-bottom:8px;color:var(--white);}
+.benefit-card p{font-size:15px;color:#ccc;line-height:1.7;}
+
+/* ── FAQ ── */
+.faq-list{margin-top:28px;display:flex;flex-direction:column;gap:12px;}
+.faq-item{background:#1a1a1a;border-radius:14px;border:1px solid #2a2a2a;padding:22px 24px;text-align:left;}
+.faq-toggle{cursor:pointer;user-select:none;}
+.faq-toggle:active{opacity:0.85;}
+.faq-q{font-size:16px;font-weight:700;margin-bottom:0;display:flex;gap:10px;align-items:center;justify-content:space-between;color:var(--white);}
+.faq-q::before{content:'Q';color:var(--lime);font-weight:900;flex-shrink:0;}
+.faq-arrow{font-size:12px;color:#666;transition:transform 0.3s;flex-shrink:0;}
+.faq-a{font-size:14px;color:#bbb;line-height:1.8;padding-left:24px;max-height:0;overflow:hidden;opacity:0;transition:max-height 0.35s ease,opacity 0.3s ease,margin-top 0.3s ease;}
+.faq-open .faq-a{margin-top:12px;}
+
+/* ── 최종 CTA ── */
+.final-cta{background:transparent;border-radius:0;padding:60px 0 40px;text-align:center;}
+.final-cta .fc-eyebrow{font-size:20px;font-style:italic;color:#888;margin-bottom:24px;letter-spacing:0.5px;}
+.final-cta h2{font-size:52px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:40px;}
+.final-cta .fc-btn{background:var(--lime);color:var(--black);font-size:20px;font-weight:800;padding:20px 72px;border-radius:14px;border:none;cursor:pointer;}
+
+/* ── 플로팅 CTA ── */
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--lime);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;}
+.sticky-cta .sc-left strong{font-size:15px;font-weight:800;color:var(--black);}
+.sticky-cta .sc-left .sc-sub{font-size:12px;margin-left:6px;color:var(--black);opacity:0.8;font-weight:600;}
+.sticky-cta .sc-btn{background:var(--black);color:var(--white);font-size:14px;font-weight:700;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
+.cta-drawer{position:fixed;bottom:0;left:0;right:0;z-index:199;background:#111;border-top:2px solid var(--lime);padding:20px 24px 90px;display:none;flex-direction:column;gap:12px;}
+.cta-drawer.open{display:flex;}
+.cta-drawer-title{font-size:13px;color:#888;margin-bottom:4px;text-align:center;}
+.cta-option{display:flex;align-items:center;justify-content:space-between;background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:16px 18px;cursor:pointer;}
+.cta-option.featured{border-color:rgba(200,255,0,0.5);background:rgba(200,255,0,0.05);}
+.cta-option-left strong{font-size:16px;font-weight:800;color:var(--white);display:block;margin-bottom:3px;}
+.cta-option-left span{font-size:13px;color:#888;}
+.cta-option-price{font-size:20px;font-weight:800;color:var(--lime);}
+.cta-close{text-align:center;font-size:13px;color:#666;cursor:pointer;margin-top:4px;}
+.page-bottom-padding{height:70px;}
+
+/* ── 모든 섹션 라벨 통일 ── */
+.why-intro .wi-label,
+.cases-intro .ci-label,
+.target-intro .ti-label,
+.how-intro .hi-label,
+.curr-intro .ci-label,
+.output-intro .oi-label,
+.weekly-care-label,
+.section-label {
+  font-size:25px !important;
+  font-weight:700;
+  color:var(--lime);
+  letter-spacing:2px;
+  margin-bottom:16px;
+  display:block;
+  text-align:center;
+}
+
+
+/* ── grunde impact 풀스크린 ── */
+.grunde-impact-section {
+  max-width:100% !important;
+  background:var(--black) !important;
+  padding:80px 32px !important;
+  text-align:center;
+  border-top:1px solid #1a1a1a;
+}
+.grunde-impact-inner {
+  max-width:480px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.gi-line {
+  font-size:53px;
+  font-weight:900;
+  color:var(--white);
+  line-height:1.2;
+  letter-spacing:-1px;
+}
+.gi-lime {
+  color:var(--lime);
+}
+.gi-accent {
+  color:var(--white);
+  margin-top:8px;
+}
+
+
+/* ── weekly-care-subtitle ── */
+.weekly-care-subtitle {
+  font-size:40px;
+  font-weight:900;
+  color:var(--lime);
+  line-height:1.2;
+  margin-bottom:16px;
+  text-align:center;
+}
+
+/* ── 흰 배경 섹션 ── */
+.section-white {
+  background:#fdf8f0 !important;
+  max-width:100% !important;
+  padding-left:24px !important;
+  padding-right:24px !important;
+}
+.section-white-inner {
+  max-width:480px;
+  margin:0 auto;
+}
+
+/* 성공사례 흰 배경 오버라이드 */
+.section-white .ci-label { color:#7c4dff !important; }
+.section-white .ci-title { color:#0d0d0d !important; }
+.section-white .ci-desc  { color:#555 !important; }
+.section-white .case-card { background:#f5f5f5 !important; border-color:#e0e0e0 !important; }
+.section-white .case-news-header { background:#ebebeb !important; border-color:#e0e0e0 !important; }
+.section-white .case-logo { color:#555 !important; }
+.section-white .case-news-dateline { color:#888 !important; }
+.section-white .case-news-tag { color:#7c4dff !important; background:rgba(124,77,255,0.1) !important; border-color:rgba(124,77,255,0.3) !important; }
+.section-white .case-news-headline { color:#0d0d0d !important; }
+.section-white .case-news-headline mark { background:rgba(124,77,255,0.15) !important; color:#7c4dff !important; }
+.section-white .case-result-badge { color:#7c4dff !important; background:rgba(124,77,255,0.1) !important; border-color:rgba(124,77,255,0.3) !important; }
+.section-white .case-news-desc { color:#666 !important; }
+.section-white .case-news-profile { color:#888 !important; }
+.section-white .case-news-profile strong { color:#333 !important; }
+.section-white .case-avatar { background:rgba(124,77,255,0.1) !important; border-color:rgba(124,77,255,0.2) !important; }
+.section-white .case-news-divider { border-color:#e0e0e0 !important; }
+
+/* 진행방식 흰 배경 오버라이드 */
+.section-white .hi-label { color:#7c4dff !important; }
+.section-white .hi-title { color:#0d0d0d !important; }
+.section-white .hi-desc  { color:#444 !important; }
+.section-white .hi-desc strong { color:#7c4dff !important; }
+.section-white .how-card { background:#f5f5f5 !important; border-color:#e0e0e0 !important; border-left-color:#7c4dff !important; }
+.section-white .how-card h4 { color:#0d0d0d !important; font-weight:900 !important; }
+.section-white .how-card p  { color:#444 !important; }
+.section-white .how-tag { color:#7c4dff !important; background:rgba(124,77,255,0.08) !important; border-color:rgba(124,77,255,0.25) !important; }
+
+/* FAQ 흰 배경 오버라이드 */
+.section-white .section-label { color:#7c4dff !important; }
+.section-white .section-title { color:#0d0d0d !important; }
+.section-white .faq-item { background:#f5f5f5 !important; border-color:#e0e0e0 !important; }
+.section-white .faq-toggle:hover { background:#efefef !important; }
+.section-white .faq-q { color:#0d0d0d !important; }
+.section-white .faq-q::before { color:#7c4dff !important; }
+.section-white .faq-arrow { color:#999 !important; }
+.section-white .faq-a { color:#555 !important; }
+
+/* ── 네온 반짝 애니메이션 (비활성) ── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {
+    text-shadow: none;
+    color: var(--black);
+  }
+  20%,24%,55% {
+    text-shadow: none;
+    color: rgba(0,0,0,0.6);
+  }
+}
+@keyframes neonPulse {
+  0%,100% { opacity:1; text-shadow: 0 0 8px rgba(0,0,0,0.4), 0 0 16px rgba(0,0,0,0.2); }
+  50%      { opacity:0.85; text-shadow: 0 0 4px rgba(0,0,0,0.2); }
+}
+.neon-text {
+  animation: none;
+}
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+
+<div class="timer-bar">
+  <span class="left-label" id="timerLabel">⚡ 1차 마감까지</span>
+  <span class="timer-count" id="countdown">00 : 00 : 00 : 00</span>
+</div>
+
+<div style="position:relative;z-index:1;">
+
+<!-- ① 히어로 -->
+<div class="hero-section reveal">
+  <div class="hero-tag">🚀 AI 만원클럽 1기 모집</div>
+  <h1 class="hero-title">아이디어만 있으면,<br><span class="lime">만들 수 있어요</span></h1>
+  <p class="hero-sub">4주 안에 만들고, 배포하고, 첫 수익까지.<br><span style="color:var(--lime);font-size:0.9em;">코딩은 AI가 해요.</span></p>
+  <div class="hero-btns">
+    <button class="btn-white" onclick="toggleDrawer()">지금 신청하기</button>
+  </div>
+  <div class="hero-recruit">🚀 1기 50명 모집중 · 5/16 개강 · <span>얼리버드 199,000원</span></div>
+</div>
+
+<!-- ② 교육 개요 -->
+<section class="reveal">
+  <div class="section-label">이런 클럽이에요</div>
+  <div class="section-title">한눈에 보는<br><span style="color:var(--lime)">AI 만원클럽</span></div>
+  <div class="overview-grid">
+    <div class="overview-card"><div class="ov-icon">📅</div><div class="ov-label">기간</div><div class="ov-value">5/18~6/15</div></div>
+    <div class="overview-card"><div class="ov-icon">🎯</div><div class="ov-label">목표</div><div class="ov-value">나만의 서비스</div></div>
+    <div class="overview-card"><div class="ov-icon">🌐</div><div class="ov-label">장소</div><div class="ov-value">온·오프라인</div></div>
+    <div class="overview-card"><div class="ov-icon">💻</div><div class="ov-label">준비물</div><div class="ov-value">노트북</div></div>
+
+  </div>
+</section>
+
+<!-- ③ 그런데 -->
+<section class="reveal grunde-section">
+  <div class="grunde-inner">
+    <div class="grunde-vibe">바이브<br>코딩</div>
+    <div class="grunde-sub">대부분 여기서 <strong style="color:var(--white);">포기합니다</strong></div>
+    <div class="grunde-flow">
+      <div class="grunde-step success">
+        <div class="grunde-face">😊</div>
+        <div class="grunde-step-text">
+          <div class="grunde-step-label">아이디어</div>
+          <div class="grunde-step-desc">"나도 할 수 있겠다!"</div>
+        </div>
+      </div>
+      <div class="grunde-step warning">
+        <div class="grunde-face">😰</div>
+        <div class="grunde-step-text">
+          <div class="grunde-step-label">개발</div>
+          <div class="grunde-step-desc">"어디서부터 시작하지?"</div>
+        </div>
+      </div>
+      <div class="grunde-step danger">
+        <div class="grunde-face">😓</div>
+        <div class="grunde-step-text">
+          <div class="grunde-step-label">배포</div>
+          <div class="grunde-step-desc">"에러가 안 잡혀..."</div>
+        </div>
+      </div>
+      <div class="grunde-step fail">
+        <div class="grunde-face">😵</div>
+        <div class="grunde-step-text">
+          <div class="grunde-step-label">포기</div>
+          <div class="grunde-step-desc">"역시 나는 안 되나봐"</div>
+        </div>
+      </div>
+    </div>
+    <div class="grunde-caption-block">
+      <div class="grunde-caption">혼자였다면<br>또 덮어뒀을 거예요.</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal grunde-impact-section">
+  <div class="grunde-impact-inner">
+    <div class="gi-line"><span class="gi-lime">AI 만원클럽</span>은</div>
+    <div class="gi-line">그 막히는 지점을</div>
+    <div class="gi-line gi-accent">함께 넘습니다.</div>
+  </div>
+</section>
+
+
+
+<!-- ④ WHY -->
+<section class="reveal">
+  <div class="why-intro">
+    <div class="wi-title"><span style="color:var(--lime)">AI 만원클럽</span>은<br>정말 끝까지<br>합니다.</div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-card-tag">01 · 완주 경험</div>
+      <div class="why-card-icon">🏁</div>
+      <div class="why-card-body">
+        <h3>혼자서는 3일 하고<br>덮어두던 걸,<br>끝까지 가요.</h3>
+        <p>팀·기한·데모데이라는 구조적 강제력이 있어요. 이번엔 진짜 완성해요.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-tag">02 · 동료 네트워크</div>
+      <div class="why-card-icon">🤝</div>
+      <div class="why-card-body">
+        <h3>주변에 없던<br>"같이 만드는 동료"가<br>생겨요.</h3>
+        <p>수료 후에도 남는 관계예요. 혼자 유튜브 보던 것과는 달라요.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-tag">03 · 옆자리 레퍼런스</div>
+      <div class="why-card-icon">👀</div>
+      <div class="why-card-body">
+        <h3>강사 성공담 말고요.<br>나랑 똑같이 시작한<br>팀원의 결과물을 봐요.</h3>
+        <p>"저도 비개발자인데 만들었어요." 그 한 마디가 유튜브 강의 100개보다 강해요.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-tag">04 · 결과물</div>
+      <div class="why-card-icon">🚀</div>
+      <div class="why-card-body">
+        <h3>4주 뒤 손에<br>남는 게 있어요.</h3>
+        <p>배포된 내 제품 + 첫 1만원 수익이에요. 작아 보여도, 그 첫 만원이 모든 걸 증명해요.</p>
+      </div>
+    </div>
+  </div>
+  <!-- 실제 사례 임팩트 -->
+  <div style="margin-top:28px;padding-bottom:16px;">
+    <!-- 숫자 지표 -->
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;">
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:20px 10px;text-align:center;">
+        <div style="font-size:36px;font-weight:900;color:var(--lime);line-height:1;">60개</div>
+        <div style="font-size:11px;color:#888;margin-top:6px;line-height:1.4;">제작된<br>서비스 수</div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:20px 10px;text-align:center;">
+        <div style="font-size:36px;font-weight:900;color:var(--lime);line-height:1;">9.5점</div>
+        <div style="font-size:11px;color:#888;margin-top:6px;line-height:1.4;">참여자<br>만족도</div>
+      </div>
+    </div>
+    <!-- 후기 카드 무한 흘러가기 -->
+    <div style="overflow:hidden;position:relative;margin:0 -24px;padding:12px 0;">
+      <div id="reviewTrack" style="display:flex;gap:12px;width:max-content;animation:marquee 80s linear infinite;">
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1KG-nxmsVqD1ry-Oi96Prn8WOY2NWAFnA&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1UlR0uu78wyTdJt2lziI-Mx68d_LWmgJN&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1CLuFFrROhK9EToPO42YnKsC3ry4fg2Uc&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1mBJibUgp1V969kTLYrZm-Nt0kiT0hpOl&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1yPEX_2eOKjbkjMbCO_IPqNokS78k_32s&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1Mnz7-iHIo0p-9JDklO_CNgTj6cCwJ3Pw&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1o8Sups2_qxfjedkhqYl_e0bOZ8RGS3IW&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=18nrWaHNSQglHXLezFEQFZkHlLPYKZhmI&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=11XqOgtiMnJT0vlm8l15xW8K8a_FYHvgZ&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1BVIpZGT14RKm-4eqrzHb6ssQ3dGAyqqE&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1FVwMjVeAXYei3Vf8uw25eNPmLCWYkQmt&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1H5zBBwb9yee9TU3do_Loy5BXAAnLylRP&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1IfbmMFdLZRcBcK1guuQyxol-p1jjrb2S&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1LUgkXdtHufZ0SJOE_z195Iq00u4Q_ow-&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1GxaIz5qDbqqk1VzP-3wOGXDrTx-AIlKB&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1u1M0W-K5Yf9iT28pSqnjlTemAXoUV3pj&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=10zitkt-a2-XTb0jTjblZRaQxfLdMCNAF&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=10eLc30Y0jP628QqxjXGxjflD-gMKdxOX&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1MyKAQbhvCydsGP8riOpX0hfH75y3ECnp&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1u6UkxHzkg9tfDnodu35k5PcnJ7Sn1cdA&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1RFNlC1fDQrqTZ5ty5N5GRTy4K8vmGfeG&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1u5zKjdfjl0wED1c9hqK3TEMjvR7BH-aL&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1F6QWAg6zPnqxtXFPqUsbqHF7hu4RGmSR&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <!-- 무한루프용 복제 -->
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1KG-nxmsVqD1ry-Oi96Prn8WOY2NWAFnA&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1UlR0uu78wyTdJt2lziI-Mx68d_LWmgJN&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1CLuFFrROhK9EToPO42YnKsC3ry4fg2Uc&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1mBJibUgp1V969kTLYrZm-Nt0kiT0hpOl&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1yPEX_2eOKjbkjMbCO_IPqNokS78k_32s&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1Mnz7-iHIo0p-9JDklO_CNgTj6cCwJ3Pw&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1o8Sups2_qxfjedkhqYl_e0bOZ8RGS3IW&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=18nrWaHNSQglHXLezFEQFZkHlLPYKZhmI&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=11XqOgtiMnJT0vlm8l15xW8K8a_FYHvgZ&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1BVIpZGT14RKm-4eqrzHb6ssQ3dGAyqqE&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1FVwMjVeAXYei3Vf8uw25eNPmLCWYkQmt&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+        <div style="width:300px;flex-shrink:0;border-radius:16px;overflow:hidden;"><img src="https://drive.google.com/thumbnail?id=1H5zBBwb9yee9TU3do_Loy5BXAAnLylRP&sz=w480" style="width:100%;height:auto;display:block;" loading="lazy"></div>
+      </div>
+    </div>
+    <div id="reviewDots" style="display:none;">
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#333;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 성공사례 -->
+<section class="reveal section-white">
+  <div class="cases-intro">
+    <div class="ci-label">이미 증명됐어요</div>
+    <div class="ci-title">AI로 만든 서비스가,<br>세상을 바꾸고<br>있습니다</div>
+    <div class="ci-desc">비개발자가 AI로 직접 만들고, 수익화에 성공한 실제 사례예요</div>
+  </div>
+  <div class="cases-grid">
+    <div class="case-card" style="overflow:hidden;">
+      <img src="https://drive.google.com/thumbnail?id=1F7Fguke3_cqHKfMrmodTFV1O4Zz5y3Ha&sz=w800" style="width:100%;height:180px;object-fit:cover;display:block;" loading="lazy">
+      <div class="case-news-body">
+        <div class="case-result-badge">1,100억원 매각</div>
+        <div class="case-news-headline">바이브코딩으로 창업 6개월만에<br><mark>Wix에 1,100억원에 매각</mark>한 AI 앱빌더</div>
+        <div class="case-news-desc">코딩 없이 AI 앱 빌더 SaaS를 혼자 만들어 Wix에 인수. 아이디어부터 엑싯까지 6개월.</div>
+        <div class="case-news-profile"><div class="case-avatar">B</div><div><strong>Base44</strong> · Maor Shlomo · 비개발자 창업</div></div>
+      </div>
+    </div>
+    <div class="case-card" style="overflow:hidden;">
+      <img src="https://drive.google.com/thumbnail?id=1JhGnWtks3IYrUiSbONI07btNk2PkV1-q&sz=w800" style="width:100%;height:180px;object-fit:cover;display:block;" loading="lazy">
+      <div class="case-news-body">
+        <div class="case-result-badge">월 1.2억 수익</div>
+        <div class="case-news-headline">3시간 바이브 코딩으로 만든<br><mark>월 1.2억 버는</mark> 비행기 게임</div>
+        <div class="case-news-desc">X에서 라이브 코딩하며 만든 게임이 즉시 바이럴. 지금도 매달 수억씩 수익 창출 중.</div>
+        <div class="case-news-profile"><div class="case-avatar">P</div><div><strong>levels.io</strong> · Pieter Levels · 인디해커</div></div>
+      </div>
+    </div>
+    <div class="case-card" style="overflow:hidden;">
+      <img src="https://drive.google.com/thumbnail?id=16I1lD4d3CMxr5veJFTWRBg0b8RKf6-lZ&sz=w800" style="width:100%;height:180px;object-fit:cover;display:block;" loading="lazy">
+      <div class="case-news-body">
+        <div class="case-result-badge">1.4억 수익 창출</div>
+        <div class="case-news-headline">개발 경험 0에서<br><mark>3개 서비스 1.4억 수익</mark> 달성</div>
+        <div class="case-news-desc">Claude로 AI 주식 분석 서비스 제작. 유료 구독자 확보 후 3개월 만에 연속 런칭 성공.</div>
+        <div class="case-news-profile"><div class="case-avatar">K</div><div><strong>StockTalkAI</strong> · Kevin Badi · 비개발자</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ 타겟 -->
+<section class="reveal">
+  <div class="target-intro">
+    <div class="ti-label">혹시 이런 분 아닌가요?</div>
+    <div class="ti-title">이런 분이라면,<br>딱이에요</div>
+  </div>
+  <div class="target-rank-list">
+    <div class="target-rank-item"><div class="rank-medal">🥇</div><div class="rank-text"><span>아이디어는 있는데</span> 개발자가 없어서 그냥 묻어둔 분</div></div>
+    <div class="target-rank-item"><div class="rank-medal">🥈</div><div class="rank-text"><span>부업·창업을 꿈꾸지만</span> 뭐부터 시작할지 막막한 분</div></div>
+    <div class="target-rank-item"><div class="rank-medal">🥉</div><div class="rank-text"><span>코딩 독학</span>을 몇 번 시도했지만 결국 포기한 분</div></div>
+    <div class="target-rank-item"><div class="rank-medal">4️⃣</div><div class="rank-text"><span>AI 도구</span>를 써봤는데 어디서부터 어떻게 써야 할지 모르는 분</div></div>
+  </div>
+</section>
+
+<!-- ⑦ 진행방식 -->
+<section class="reveal section-white">
+  <div class="how-intro">
+    <div class="hi-label">이렇게 운영돼요</div>
+    <div class="hi-title">클럽 운영 방식</div>
+    <div class="hi-desc">강의만 듣다 끝나지 않아요.<br>만들고, 배포하고, 수익까지 가는<br><strong>구조예요.</strong></div>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-card-icon">💬</div>
+      <div class="how-card-body">
+        <h4>슬랙 팀 커뮤니티</h4>
+        <p>팀별 전용 채널 + 공지·질문·잡담방으로 운영돼요. 혼자 막히는 순간 없이 <span style="color:#7c4dff;font-weight:700;">동료들과 함께 돌파</span>해요.</p>
+        <div class="how-tag">Slack 커뮤니티</div>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">📖</div>
+      <div class="how-card-body">
+        <h4>주차별 학습 자료 + 팀 미팅</h4>
+        <p>매주 학습 가이드와 실습 미션이 제공돼요. <span style="color:#7c4dff;font-weight:700;">팀끼리 주 1회 이상 모여</span> 중간 상황을 공유해요.</p>
+        <div class="how-tag">주차별 가이드</div>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">🙋</div>
+      <div class="how-card-body">
+        <h4>상시 질의응답</h4>
+        <p>막히는 코드, 방향 고민까지. <span style="color:#7c4dff;font-weight:700;">QnA 채널에서 언제든 질문</span>하면 빠르게 답변드려요.</p>
+        <div class="how-tag">상시 QnA</div>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">🎙️</div>
+      <div class="how-card-body">
+        <h4>마케팅 특강 1회</h4>
+        <p>현직 <strong style="color:#0d0d0d;font-weight:900;">바이브코더·창업자</strong>가 직접 강연해요. <span style="color:#7c4dff;font-weight:700;">수익화 전략, 마케팅, 실제 사례</span>를 들을 수 있어요.</p>
+        <div class="how-tag">특강 1회 포함</div>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-card-icon">🏆</div>
+      <div class="how-card-body">
+        <h4>리더보드 & 데일리 인증</h4>
+        <p>개인·팀 미션 점수를 실시간으로 확인해요. <span style="color:#7c4dff;font-weight:700;">데일리 모각AI 인증</span>으로 실행력을 유지해요.</p>
+        <div class="how-tag">리더보드 운영</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑧ 커리큘럼 - AI 만원클럽 -->
+<section class="reveal">
+  <div class="curr-intro">
+    <div class="ci-label">커리큘럼</div>
+    <div class="ci-title">AI 만원클럽</div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-block">
+      <p class="prog-hook">4주 안에 만들고, 배포하고, 첫 수익까지</p>
+      <p class="prog-sub">Claude Code 기반 4주 실전 과정 · 커뮤니티</p>
+      <div class="prog-journey">
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">개강일 · 5/16(토)</div>
+            <h4>OT + 팀 매칭 + 미니과제</h4>
+            <p>클럽 오리엔테이션 후 팀 배정. 5가지 주제 중 하나를 골라 미니 서비스를 직접 만들어봐요. 빠른 성취감을 느끼는 첫날이에요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**1주차** · MAKE</div>
+            <h4>아이디어 구체화 → 기획 완료</h4>
+            <p>타겟·페인포인트·BM을 정리해 1페이지 기획안을 완성해요. 내 아이디어가 실제 서비스 스펙으로 바뀌는 주차예요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**2주차** · MAKE</div>
+            <h4>MVP 제작 완료 + 배포</h4>
+            <p>Claude Code로 실제 작동하는 서비스를 만들고 배포해요. 이 주가 끝나면 내 서비스 URL이 생겨요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**3주차** · GROW</div>
+            <h4>마케팅 특강 + 유통 채널 세팅</h4>
+            <p>마케팅 계정 세팅, 유저 인터뷰, 채널별 전략까지. 만든 것을 세상에 알리는 주차예요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot active"></div>
+          <div class="journey-content">
+            <div class="journey-week">**4주차** · GROW</div>
+            <h4>이터레이션 + 수익화 시도</h4>
+            <p>마케팅을 반복하며 첫 유저와 첫 수익을 만들어요. 4주의 마지막엔 데모데이에서 결과물을 발표해요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑨ AI 만원클럽 신청 카드 -->
+<section class="reveal">
+  <div class="price-grid">
+    <div class="price-card featured">
+      <div class="pc-badge">추천</div>
+      <h4>AI 만원클럽</h4>
+      <div class="pc-price">199,000원</div>
+      <div class="pc-original">정가 269,000원</div>
+      <ul><li>4주 커리큘럼 전체</li><li>커뮤니티 입장</li><li>QnA 채널 이용</li><li>데모데이 참가</li></ul>
+      <button class="pc-btn" style="background:var(--lime);color:var(--black);" onclick="openDrawer('basic')">신청하기</button>
+    </div>
+  </div>
+</section>
+
+<!-- 브릿지 - Claude Code 처음이라면 -->
+<section class="reveal bridge-solo-section">
+  <div class="bridge-solo-inner">
+    <div class="bs-emoji">🤔</div>
+    <div class="bs-title">Claude Code가<br><span>아예 처음</span>이라면?</div>
+    <div class="bs-desc"><strong>온보딩 클래스</strong>가 포함된<br>AI 만원클럽 PLUS를 추천드려요!</div>
+  </div>
+</section>
+
+<!-- ⑩-B PLUS 신청 카드 -->
+<section class="reveal" style="padding-top:16px;">
+  <div class="price-grid">
+    <div class="price-card" style="padding:32px 28px;">
+      <div style="background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:12px;padding:20px 18px;margin-bottom:20px;">
+        <p style="font-size:20px;font-weight:900;color:var(--white);margin-bottom:6px;">처음부터 끝까지,<br>완주를 보장하는 패키지</p>
+        <p style="font-size:14px;color:#888;margin-bottom:14px;">만원클럽 전체 + 온보딩 클래스 + 튜터 1:1 피드백 + 데모데이</p>
+        <div class="onboarding-note"><span>✅ 온보딩 클래스 포함 — 개강 전 Claude Code 기초를 완전 정복하는 1일 집중 과정이 포함되어 있어요!</span></div>
+      </div>
+      <div class="pc-badge" style="background:var(--black3);color:var(--lime);border:1px solid rgba(200,255,0,0.3);">PLUS</div>
+      <h4>AI 만원클럽 PLUS</h4>
+      <div class="pc-price">249,000원</div>
+      <div class="pc-original">정가 309,000원</div>
+      <ul><li>4주 커리큘럼 전체</li><li>온보딩 클래스 1일 ✨</li><li>튜터 1:1 피드백</li><li>데모데이 참가</li></ul>
+      <button class="pc-btn" style="background:transparent;color:var(--lime);border:1px solid var(--lime);" onclick="openDrawer('plus')">신청하기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ⑪ 합류 케어 -->
+<section class="reveal weekly-care-section">
+  <div class="weekly-care-inner">
+    <div class="care-char-wrap">
+      <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="12" y="16" width="40" height="30" rx="2" fill="#E05A1B"/>
+        <rect x="4" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
+        <rect x="52" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
+        <rect x="18" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
+        <rect x="36" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
+        <rect x="20" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
+        <rect x="36" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
+      </svg>
+      <div class="care-char-label">합류 직후부터 시작되는 케어 시스템</div>
+    </div>
+    <div class="weekly-care-label">합류 케어</div>
+    <div class="weekly-care-title">처음이어도<br>절대</div>
+    <div class="weekly-care-subtitle">혼자 두지 않아요</div>
+    <div class="weekly-care-sub">합류 직후부터 이뤄지는 단계별 학습 케어 시스템<br><span style="color:#555;font-size:13px;">(상세 내용 추가 예정)</span></div>
+    <div class="weekly-timeline">
+      <div class="weekly-item">
+        <div class="weekly-dot on"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">D-DAY 0 · 합류 직후 <span class="plus-badge">PLUS 전용</span></div>
+          <h4>웰컴 온보딩 패키지</h4>
+          <p>슬랙 채널 안내, 개발 환경 세팅 가이드, 첫 미션 발송. AI 만원클럽 PLUS 수강생에게만 제공됩니다.</p>
+          <div class="weekly-badge">PLUS 전용</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot on"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 1 · 기초 케어</div>
+          <h4>기초 학습 밀착 지원</h4>
+          <p>Claude Code 첫 사용부터 챙깁니다. 막히면 QnA, 진도 체크, 1:1 피드백까지.</p>
+          <div class="weekly-badge">주차별 가이드</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 2~3 · 빌드 케어</div>
+          <h4>내 서비스 만들기 집중 지원</h4>
+          <p>실제 개발 중 막히는 포인트를 함께 해결합니다. (상세 내용 추가 예정)</p>
+          <div class="weekly-badge">커뮤니티 Q&A</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 4 · 런치 케어</div>
+          <h4>배포 &amp; 데모데이</h4>
+          <p>서비스 완성, 배포, 첫 유저 모집까지. (상세 내용 추가 예정)</p>
+          <div class="weekly-badge">데모데이</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑫ 수료 후 -->
+<section class="reveal">
+  <div class="output-intro">
+    <div class="oi-label">4주 후 달라지는 것들</div>
+    <div class="oi-title">4주 뒤,<br>손에 남는 것들이에요</div>
+    <div class="oi-desc">만들고, 배포하고, 수익까지.<br>전 과정을 직접 경험해요.</div>
+  </div>
+  <div class="output-circle-wrap" style="overflow:visible;">
+    <div class="oc-ring"></div>
+    <div class="oc-center">나의<br>서비스</div>
+    <div class="oc-node" style="top:4%;left:50%;"><div class="oc-node-icon">💡</div><div class="oc-node-label">아이디어</div></div>
+    <div class="oc-node" style="top:32%;left:95%;"><div class="oc-node-icon">🤖</div><div class="oc-node-label">AI 개발</div></div>
+    <div class="oc-node" style="top:80%;left:78%;"><div class="oc-node-icon">🚀</div><div class="oc-node-label">배포</div></div>
+    <div class="oc-node" style="top:80%;left:22%;"><div class="oc-node-icon">📣</div><div class="oc-node-label">마케팅</div></div>
+    <div class="oc-node" style="top:32%;left:5%;"><div class="oc-node-icon">💰</div><div class="oc-node-label">수익화</div></div>
+  </div>
+  <div class="output-cards">
+    <div class="output-card"><div class="oc-icon">📱</div><div><h4>배포된 내 서비스</h4><p>실제 URL이 있고, 누구에게나 링크를 보낼 수 있는 내 서비스가 생겨요.</p><div class="oc-tag">배포 완료</div></div></div>
+    <div class="output-card"><div class="oc-icon">💰</div><div><h4>첫 수익 경험</h4><p>결제 기능을 붙이고, 실제 고객을 만날 수 있는 상태까지 가요. 첫 만원이 전부를 바꿔요.</p><div class="oc-tag">수익 연결</div></div></div>
+    <div class="output-card"><div class="oc-icon">🧠</div><div><h4>AI로 일하는 방식</h4><p>코딩이 아니라 기획·실행·운영 전체를 AI와 함께 하는 법을 몸에 익혀요.</p><div class="oc-tag">워크플로우 전환</div></div></div>
+  </div>
+</section>
+
+<!-- 데모데이/종강파티 -->
+<section class="reveal">
+  <div style="text-align:center;padding-bottom:28px;">
+    <div class="section-label" style="font-size:13px !important;">마지막 날</div>
+    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:12px;">4주의 마지막,<br>직접 무대에<br>서요.</div>
+    <div style="font-size:16px;color:#bbb;line-height:1.7;">6월 13일 토요일 · 오프라인</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:12px;">🏆</div>
+      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">데모데이</h4>
+      <p style="font-size:14px;color:#bbb;line-height:1.6;">팀별 결과물 발표 & 시상식<br><span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:12px;">🎊</div>
+      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">종강파티</h4>
+      <p style="font-size:14px;color:#bbb;line-height:1.6;">수료자 전원 초대<br>네트워킹 파티</p>
+    </div>
+  </div>
+</section>
+
+<!-- 참여혜택 -->
+<section class="reveal">
+  <div style="text-align:center;margin-bottom:32px;">
+    <div class="section-label" style="font-size:13px !important;">참여하면 드려요</div>
+    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;">1기 특별 혜택</div>
+  </div>
+
+  <!-- 1기 참석 혜택 -->
+  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">1기 참석 혜택</div>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🌐</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">도메인 1년 무료</h4>
+        <p style="font-size:14px;color:#bbb;">내 서비스 주소가 생겨요. <span style="color:var(--lime);font-weight:700;">15,000원 상당</span></p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🎙️</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">마케팅 특강 1회</h4>
+        <p style="font-size:14px;color:#bbb;">현직 바이브코더·창업자 직강. 수익화 전략 실전 공개</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🏆</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">데모데이 참가</h4>
+        <p style="font-size:14px;color:#bbb;">6/13 오프라인 발표 & 시상. <span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수료자 혜택 -->
+  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">수료자 혜택</div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">📚</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">교육자료 평생 소장</h4>
+        <p style="font-size:14px;color:#bbb;">모든 커리큘럼 자료를 영구적으로 보관해요</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🎓</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">수료 인증서</h4>
+        <p style="font-size:14px;color:#bbb;">AI 만원클럽 1기 수료 공식 인증서 발급</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">👥</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">알럼나이 & 빌더 커뮤니티</h4>
+        <p style="font-size:14px;color:#bbb;">수료 후에도 계속되는 동료 네트워크</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑬ 한정인원 -->
+<section class="reveal" style="padding-top:0;">
+  <div class="seats-section">
+    <h2>⚡ 1기 마감 임박</h2>
+    <p class="seats-sub">선착순 50명 정원 · 마감 후 다음 기수 일정 미정</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+    <div class="seats-count"><span>73%</span> 마감 · 남은 자리 <span>14석</span></div>
+    <button class="seats-cta-btn" onclick="toggleDrawer()">지금 바로 신청하기 →</button>
+  </div>
+</section>
+
+<!-- ⑮ 수강생 후기 -->
+<section class="reveal" style="max-width:100%;padding:60px 0;background:#0d0d0d;overflow:hidden;">
+  <div style="max-width:480px;margin:0 auto;padding:0 24px 32px;">
+    <div class="section-label">수강생 후기</div>
+    <div class="section-title" style="font-size:36px;">직접 들어보세요</div>
+  </div>
+
+  <!-- 상단 줄: 라임, 왼쪽으로 흐름 -->
+  <div style="overflow:hidden;margin-bottom:14px;">
+    <div style="display:flex;gap:14px;width:max-content;animation:marquee 60s linear infinite;">
+      <!-- 원본 11장 -->
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🚀</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">임*우</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"코딩은 전혀 몰랐는데, 직접 만들어보는 경험 자체가 저한테는 큰 수확이었어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌱</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">서*연</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">1인창업 준비</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"AI를 어떻게 활용하는지, 그 흐름을 처음으로 제대로 잡은 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">✨</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">성*경</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자인</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"뭐든 만들 수 있겠다는 자신감이 생겼어요. 그게 이번 교육에서 얻은 가장 큰 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💡</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">신*식</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">스타트업</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"프롬프트 하나에 결과가 이렇게 달라지는지 몰랐어요. AI 툴 쓰는 법이 완전히 달라졌습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎯</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">윤*림</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">기획자</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"조쉬님을 알게 된 것, 그리고 내 시야가 그만큼 넓어진 것. 그게 제일 큰 성과예요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔥</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">이*희</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자인/마케팅</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"생각만 했던 온라인 사업을 직접 만들 수 있다는 게 실감났어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎨</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">김*일</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자이너</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"플랫폼이 어떻게 돌아가는지, 전체 맥락이 처음으로 잡혔어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💼</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">김*화</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">마케팅 대행</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"세일즈 퍼널 웹서비스를 직접 구현해봤어요. 조쉬님 프레임워크가 그대로 도움이 됐습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌟</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">박*령</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">1인마케터/강사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"머릿속에만 있던 아이디어들을 이제 실현할 수 있겠다는 자신감이 생겼어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">👨‍🍳</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">문*호</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">호텔요리사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"그냥 단어로만 알던 걸 직접 만들었어요. 완성됐다는 게 저한테는 진짜 큰 성과였어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🏃</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">조*진</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"일단 꾸준히 만들어보자는 마음이 생겼어요. 시작하게 해줬다는 것만으로도 충분했습니다."</p>
+      </div>
+      <!-- 복제 (무한루프) -->
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🚀</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">임*우</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"코딩은 전혀 몰랐는데, 직접 만들어보는 경험 자체가 저한테는 큰 수확이었어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌱</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">서*연</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">1인창업 준비</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"AI를 어떻게 활용하는지, 그 흐름을 처음으로 제대로 잡은 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">✨</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">성*경</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자인</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"뭐든 만들 수 있겠다는 자신감이 생겼어요. 그게 이번 교육에서 얻은 가장 큰 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💡</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">신*식</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">스타트업</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"프롬프트 하나에 결과가 이렇게 달라지는지 몰랐어요. AI 툴 쓰는 법이 완전히 달라졌습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎯</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">윤*림</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">기획자</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"조쉬님을 알게 된 것, 그리고 내 시야가 그만큼 넓어진 것. 그게 제일 큰 성과예요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔥</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">이*희</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자인/마케팅</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"생각만 했던 온라인 사업을 직접 만들 수 있다는 게 실감났어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎨</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">김*일</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">디자이너</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"플랫폼이 어떻게 돌아가는지, 전체 맥락이 처음으로 잡혔어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💼</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">김*화</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">마케팅 대행</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"세일즈 퍼널 웹서비스를 직접 구현해봤어요. 조쉬님 프레임워크가 그대로 도움이 됐습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌟</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">박*령</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">1인마케터/강사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"머릿속에만 있던 아이디어들을 이제 실현할 수 있겠다는 자신감이 생겼어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">👨‍🍳</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">문*호</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">호텔요리사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"그냥 단어로만 알던 걸 직접 만들었어요. 완성됐다는 게 저한테는 진짜 큰 성과였어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#c8ff00;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.13);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0d0d0d;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🏃</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">조*진</div><div style="font-size:12px;color:rgba(0,0,0,0.5);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#0d0d0d;">"일단 꾸준히 만들어보자는 마음이 생겼어요. 시작하게 해줬다는 것만으로도 충분했습니다."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 줄: 보라색, 오른쪽으로 흐름 -->
+  <div style="overflow:hidden;">
+    <div style="display:flex;gap:14px;width:max-content;animation:marquee-reverse 65s linear infinite;">
+      <!-- 원본 10장 -->
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🧭</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">최*진</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"어떤 AI를 어떻게 써야 하는지 흐름이 잡혔어요. 막막했던 것들이 조금씩 보이기 시작했습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">📚</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">민*원</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">HR</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"혼자였으면 몇 달은 걸렸을 것들을 이틀 만에 압축해서 배웠어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">⚡</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">한*우</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">증권사 PM</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"직접 서비스를 만들어볼 수 있겠다는 감각이 생겼어요. 그게 제일 달라진 점이에요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🛠️</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">김*주</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">1인 사업가</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"부족하지만, 실제로 운영되는 서비스를 내 손으로 만들었다는 게 가장 컸어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎓</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">최*정</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">영어회화 플랫폼 원장</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"PRD 기획부터 마케팅까지, 이렇게 한 번에 배울 수 있는 교육은 처음이었어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌈</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">도*수</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">프리랜서</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"챗GPT를 이제야 제대로 쓰게 됐어요. 바이브코딩이 뭔지도 처음 알았고요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🤖</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">서*기</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">물류회사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"AI 에이전트 사업이 진짜 기회라는 걸 알게 됐어요. 제 인생에서 큰 전환점이 된 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔬</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">노*완</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">과학 강사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"창업 아이디어와 방향을 처음으로 구체적으로 잡게 됐어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔑</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">구*형</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">특허업계</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"한계도 있지만, 다양한 툴을 알게 됐고 계속 도전해봐야겠다는 자극이 됐어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💎</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">손*호</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">IT기업 사업운영팀</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"AI로 수익화하는 전 과정을 직접 체험했어요. 가능성이 보이기 시작했습니다."</p>
+      </div>
+      <!-- 복제 (무한루프) -->
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🧭</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">최*진</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">비공개</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"어떤 AI를 어떻게 써야 하는지 흐름이 잡혔어요. 막막했던 것들이 조금씩 보이기 시작했습니다."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">📚</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">민*원</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">HR</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"혼자였으면 몇 달은 걸렸을 것들을 이틀 만에 압축해서 배웠어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">⚡</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">한*우</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">증권사 PM</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"직접 서비스를 만들어볼 수 있겠다는 감각이 생겼어요. 그게 제일 달라진 점이에요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🛠️</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">김*주</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">1인 사업가</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"부족하지만, 실제로 운영되는 서비스를 내 손으로 만들었다는 게 가장 컸어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🎓</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">최*정</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">영어회화 플랫폼 원장</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"PRD 기획부터 마케팅까지, 이렇게 한 번에 배울 수 있는 교육은 처음이었어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🌈</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">도*수</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">프리랜서</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"챗GPT를 이제야 제대로 쓰게 됐어요. 바이브코딩이 뭔지도 처음 알았고요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🤖</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">서*기</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">물류회사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"AI 에이전트 사업이 진짜 기회라는 걸 알게 됐어요. 제 인생에서 큰 전환점이 된 것 같아요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔬</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">노*완</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">과학 강사</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"창업 아이디어와 방향을 처음으로 구체적으로 잡게 됐어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">🔑</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">구*형</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">특허업계</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"한계도 있지만, 다양한 툴을 알게 됐고 계속 도전해봐야겠다는 자극이 됐어요."</p>
+      </div>
+      <div style="width:280px;flex-shrink:0;background:#5b21b6;border-radius:16px;padding:22px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;"><span style="font-size:18px;line-height:1;">💎</span></div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;">손*호</div><div style="font-size:12px;color:rgba(255,255,255,0.55);">IT기업 사업운영팀</div></div>
+        </div>
+        <p style="font-size:13px;line-height:1.7;color:#fff;">"AI로 수익화하는 전 과정을 직접 체험했어요. 가능성이 보이기 시작했습니다."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑮ FAQ -->
+<section class="reveal section-white">
+  <div class="section-label" style="text-align:left;">궁금한 게 있으신가요?</div>
+  <div class="section-title" style="text-align:left;">자주 묻는 질문</div>
+  <div class="faq-list">
+
+    <!-- 📌 상품 기본 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:8px;margin-bottom:4px;padding-left:4px;">📌 상품 기본</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">AI 만원클럽이 뭔가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">4주 안에 AI로 나만의 서비스를 만들고 첫 수익까지 시도하는 기수제 메이커 클럽이에요. 혼자서는 중간에 덮어두던 아이디어와 프로젝트를, 같은 고민을 하는 동료들과 끝까지 완주하고 결과물을 만들어가는 구조입니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">누가 운영하나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">스파르타클럽이 운영합니다. 바이브코딩으로 실제 수익을 만들어보신 튜터님과 마케팅 영역의 전문가와 함께 팀별 피어 활동으로 진행돼요.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">"만원클럽"은 무슨 뜻인가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">"AI로 1만원이라도 벌어보자"는 컨셉에서 출발했어요. "내가 만든 서비스로 처음 돈을 벌어본다"는 경험이 핵심입니다. 대부분의 사람들은 수익을 벌기 전, 그 앞에서 멈춰요. 그 벽을 한 번 넘은 분들이 AI 시대엔 월 수십·수백만 원까지 속도를 내고 있고, 만원클럽은 그 벽을 4주 안에 넘어보자는 출발선입니다.</div>
+    </div>
+
+    <!-- 🙋 신청 대상·수준 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">🙋 신청 대상·수준</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">저도 신청할 수 있는 수준일까요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">클로드코드를 한 번이라도 써본 분이면 충분합니다. ✅ 클로드 Pro 결제하고 몇 번 써봤다 ✅ 클로드코드 설치해봤다 ✅ 프롬프트 활용 및 간단한 기능 만들어본 적 있다<br><br>아직 클로드코드를 경험해보지 않으셨다면 AI 만원클럽 Plus(+온보딩 교육)를 추천드려요.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">개발자가 아닌데 괜찮나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">비개발자가 더 잘 맞는 프로그램이에요. AI 바이브코딩은 개발 경력을 필요로 하지 않습니다. 누구든 도전할 수 있어요.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">완전 초보인데도 정말 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">클로드코드 설치·기본 사용 경험이 아예 없으시면 AI 만원클럽 Plus(+온보딩 교육)가 필수예요. 개강 전 3시간 라이브 세션으로 환경 세팅부터 기본 사용법까지 다져드립니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">이미 서비스를 만들어본 사람도 도움 되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">네, 당연히 도움이 됩니다. 오히려 이 프로그램의 가치를 가장 진하게 체감하실 수 있는 분들이에요. 바이브코딩 기술·AI 활용법은 이미 넘쳐나는 시대라, 진짜 어려운 건 배우는 게 아니라 "실행"이거든요. 혼자면 또 덮어두게 되는 프로젝트를, 4주 기수 구조 안에서 강제로 완주하는 것이 AI 만원클럽의 본질입니다.</div>
+    </div>
+
+    <!-- 💰 가격·옵션 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">💰 가격·옵션</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">얼리버드와 판매가의 차이는? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">1기 중에서도 일찍 신청해주신 선착순 한정 할인이에요. 수량 소진 시 자동으로 일반 판매가로 전환됩니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">옵션은 어떤 차이인가요? 뭘 고르면 되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a"><strong>AI 만원클럽</strong>: 클로드코드 이미 써보신 분이 선택하는 옵션<br><strong>AI 만원클럽 PLUS</strong>: 환경 세팅·기본 사용법부터 다지고 싶은 분 (온보딩 포함)</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">신청 이후 옵션을 변경할 수 있나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">온보딩 교육 시작일 전까지 변경 가능합니다. 변경 희망 시 고객센터로 문의 주세요.</div>
+    </div>
+
+    <!-- 📅 일정·시간 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">📅 일정·시간</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">언제 시작해서 언제 끝나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">모집 기간: 4/27(월) ~ 5/14(목) 23:59<br>온보딩 교육 (PLUS 선택 시): 5/10(일) 11:00~14:00 / 5/13(수) 20:00~23:00 중 택1<br>클럽 운영 기간: 5/16(토) ~ 6/13(토), 4주 / 27일<br>종강일: 6/13(토), 오프라인 데모데이 &amp; 수료식 진행</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">주당 시간이 얼마나 필요한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">최소 주 4~5시간(평일 저녁 + 주말) 권장드려요. 자율학습 + 팀 미팅 1회 + 제작 시간 기준입니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">직장인인데 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">네, 주말을 포함해 한 주에 4~5시간이라 충분히 가능합니다. 기본 작업 시간은 자율 중심이라 각자 페이스로 진행하실 수 있어요.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">출장·휴가로 빠지는 기간이 있어요 <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">작업 진척은 개인 자율 중심이라, 빠지는 기간을 제외한 주에 추가 시간을 확보해주신다면 녹화본·교육 자료로 따라올 수 있어요. 단, 개강일(5/16 토)은 꼭 참석을 권장드립니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">이월이나 대체 수강 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">이월·대체 수강은 불가합니다. 신청 전 일정을 꼭 확인해주세요.</div>
+    </div>
+
+    <!-- 🎓 학습·운영 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">🎓 학습·운영</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">어떻게 진행되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">4주 동안 사전 리포트 → OT(오프라인 킥오프) → 서비스 제작 프레임워크 강의 → 미니 과제 → 팀 미팅(주 1회) → 주차별·데일리 미션 → 별도 특별 라이브(3주차) → 데모데이(4주차 종강) 순으로 진행됩니다. 노션 자료집과 리더보드, 슬랙 24시간 질의응답도 운영해요.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">튜터가 1:1로 봐주나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">아니요. 커뮤니티 슬랙 채널에서 단체 응답 방식이에요. 개발 교육이 아니라 수익을 내는 커뮤니티 형식이기 때문에 1:1 멘토링·코드 리뷰 등은 포함되지 않습니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">팀은 어떻게 배정되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">결제 후 사전 설문을 받아 관심 카테고리·경험 수준·가용 시간대를 고려해서 배정합니다. 5인 1팀으로 구성되어요. 친구와 함께 신청했다면 같은 팀으로 배정받으실 수 있게 조정해드립니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">어떤 서비스를 만들어야 하나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">본인이 만들고 싶은 것으로 시작해요. 바이브코딩으로 구현 가능한 웹/앱/자동화 서비스라면 무엇이든 자유롭게 시도할 수 있습니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">저는 아이디어가 없어요 <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">1주차에 아이디어 구체화 단계와 함께 예시 아이디어들도 함께 제공됩니다. 사전 리포트 작성 + 팀 피드백으로 아이디어를 정하실 수도 있기 때문에 아이디어 없는 상태로 시작하셔도 됩니다.</div>
+    </div>
+
+    <!-- 💳 결제·환불 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">💳 결제·환불</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">환불 정책이 어떻게 되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">개강일 전 수강 철회 시 전액 환불됩니다.<br><br>• 공식 시작일 1일 전: 전액 환불<br>• 공식 시작 당일(1주차): 25% 제하고 환불<br>• 시작 2~14일(2주차): 50% 제하고 환불<br>• 시작 15~21일(3주차): 75% 제하고 환불<br>• 시작 22일 이후(4주차): 환불 불가</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">결제 수단·할부·증빙 발행은요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">스파르타클럽 이용규정에 따라 진행됩니다. 상세는 결제 페이지에서 확인 가능합니다.</div>
+    </div>
+
+    <!-- 🏆 수료·혜택 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">🏆 수료·혜택</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">수료 기준은? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">4주 간의 미션 수행 80% 이상 + 서비스 제작 완료, 두 가지 충족 시 수료로 인정됩니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">수료증 발급되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">네, 수료 조건 충족 시 스파르타 수료증이 발급됩니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">수료 후 커뮤니티 접근 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">종강 후 3개월간 슬랙 커뮤니티·자료 열람이 유지됩니다.</div>
+    </div>
+
+    <!-- 🛠️ 기술·환경 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">🛠️ 기술·환경</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">클로드 유료 구독이 필요한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">클로드 Pro 또는 클로드코드 Max로 유료 플랜 이용을 권장드립니다. (개인 비용, 프로그램 비용에 미포함)</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">Mac/Windows 어느 쪽도 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">네, 둘 다 가능해요. 환경 세팅 가이드는 OS별로 제공합니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">API 키·유료 도구 등 추가 비용이 드나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">기본 과정은 추가 비용 없이 진행 가능해요. 본인이 선택한 서비스에 결제·인증 등 유료 기능을 붙일 경우 해당 비용은 개인 부담입니다.</div>
+    </div>
+
+    <!-- 🏢 오프라인·온라인 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">🏢 오프라인·온라인</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">오프라인 참석이 필수인가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">권장하지만 의무는 아닙니다. 종강일에 수료식 겸 데모데이 1회 오프라인 진행되며, 온라인 영상 제공으로 참여 가능합니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">수도권 밖에 살아요. 참여 가능한가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">네, 온/오프라인 하이브리드 운영이기 때문에 당연히 가능합니다. 오프라인 1회 외 모든 활동은 온라인입니다. 오프라인 불참자도 완주·수료 가능합니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">종강일 오프라인 장소는 어디인가요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">스파르타클럽 본사 — 서울시 강남구 테헤란로 311 아남타워 3층에서 진행됩니다. 불참자도 수료식을 자료집으로 공유드려요.</div>
+    </div>
+
+    <!-- ❓ 기타 -->
+    <div style="font-size:12px;font-weight:800;color:#7c4dff;letter-spacing:2px;text-transform:uppercase;margin-top:20px;margin-bottom:4px;padding-left:4px;">❓ 기타</div>
+
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">신청은 어디서 하나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">보고 계시는 상세 페이지에서 신청 가능합니다. 개인의 환경에 따라 옵션을 선택해주시면 됩니다.</div>
+    </div>
+    <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
+      <div class="faq-q">문의는 어디로 하면 되나요? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">안내드리는 고객센터 링크를 통해 문의 부탁드려요.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ⑯ 최종 CTA -->
+<section style="padding-bottom:32px;">
+  <div class="final-cta reveal">
+    <p class="fc-eyebrow">무한한 공간, 저 너머로.</p>
+    <h2>이번엔, 끝까지<br>가볼까요?</h2>
+    <button class="fc-btn" onclick="toggleDrawer()">신청하기</button>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:40px 24px 120px;max-width:100%;">
+  <div style="max-width:480px;margin:0 auto;">
+    <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;">팀스파르타 주식회사</div>
+    <div style="font-size:12px;color:#555;margin-bottom:20px;">AI 만원클럽은 팀스파르타가 운영합니다.</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#555;line-height:1.8;">
+      <div><span style="color:#777;">대표자</span>&nbsp;&nbsp;이범규</div>
+      <div><span style="color:#777;">사업자등록번호</span>&nbsp;&nbsp;264-88-01106</div>
+      <div><span style="color:#777;">통신판매업 신고번호</span>&nbsp;&nbsp;2021-서울강남-03175</div>
+      <div><span style="color:#777;">주소</span>&nbsp;&nbsp;서울특별시 강남구 테헤란로44길 8, 12층</div>
+      <div><span style="color:#777;">이메일</span>&nbsp;&nbsp;<a href="mailto:contact@teamsparta.co" style="color:#555;text-decoration:none;">contact@teamsparta.co</a></div>
+    </div>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid #1e1e1e;display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="#" style="font-size:12px;color:#555;text-decoration:none;">이용약관</a>
+      <a href="#" style="font-size:12px;color:#888;text-decoration:none;font-weight:700;">개인정보처리방침</a>
+      <a href="#" style="font-size:12px;color:#555;text-decoration:none;">환불정책</a>
+    </div>
+    <div style="margin-top:16px;font-size:11px;color:#333;">© 2025 Team Sparta Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<div class="page-bottom-padding"></div>
+</div>
+
+<!-- 플로팅 CTA -->
+<div class="sticky-cta" onclick="toggleDrawer()">
+  <div class="sc-left"><strong class="neon-text">🚀 AI 만원클럽 1기</strong><span class="sc-sub">5/16 개강 · 모집중</span></div>
+  <button class="sc-btn">신청하기 ↑</button>
+</div>
+<div class="cta-drawer" id="ctaDrawer">
+  <div class="cta-drawer-title">상품을 선택하세요</div>
+  <div class="cta-option" id="drawerBasic" onclick="selectOption('basic')">
+    <div class="cta-option-left"><strong>AI 만원클럽</strong><span>4주 커리큘럼 + 커뮤니티 + QnA</span></div>
+    <div class="cta-option-price">199,000원</div>
+  </div>
+  <div class="cta-option" id="drawerPlus" onclick="selectOption('plus')">
+    <div class="cta-option-left"><strong>AI 만원클럽 PLUS ✨</strong><span>만원클럽 전체 + 온보딩 라이브 3시간</span></div>
+    <div class="cta-option-price">249,000원</div>
+  </div>
+  <button id="drawerCtaBtn" style="width:100%;padding:15px;border-radius:12px;background:var(--lime);color:var(--black);font-size:16px;font-weight:800;border:none;cursor:pointer;display:none;margin-top:4px;" onclick="goToPayment()">신청하기 →</button>
+  <div class="cta-close" onclick="event.stopPropagation();toggleDrawer()">닫기 ✕</div>
+</div>
+
+<script>
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H,dots=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+function initDots(){dots=[];for(let i=0;i<60;i++)dots.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,o:Math.random()*0.5+0.1});}
+function draw(){ctx.clearRect(0,0,W,H);dots.forEach(d=>{d.x+=d.vx;d.y+=d.vy;if(d.x<0)d.x=W;if(d.x>W)d.x=0;if(d.y<0)d.y=H;if(d.y>H)d.y=0;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fillStyle=`rgba(200,255,0,${d.o})`;ctx.fill();});requestAnimationFrame(draw);}
+resize();initDots();draw();
+window.addEventListener('resize',()=>{resize();initDots();});
+
+// 캐러셀: CSS marquee 애니메이션으로 대체됨
+
+function updateTimer(){
+  const round1End=new Date('2026-05-04T23:59:59');
+  const round2End=new Date('2026-05-11T23:59:59');
+  const n=new Date();
+  let target,urgentLabel;
+  if(n<=round1End){target=round1End;urgentLabel='⚡ 1차 마감까지';}
+  else if(n<=round2End){target=round2End;urgentLabel='🔥 최종 마감까지';}
+  else{document.getElementById('countdown').textContent='마감되었습니다';document.getElementById('timerLabel').textContent='모집 마감';return;}
+  document.getElementById('timerLabel').textContent=urgentLabel;
+  let diff=target-n;
+  const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  document.getElementById('countdown').textContent=`${String(d).padStart(2,'0')} : ${String(h).padStart(2,'0')} : ${String(m).padStart(2,'0')} : ${String(s).padStart(2,'0')}`;
+}
+updateTimer();setInterval(updateTimer,1000);
+
+function toggleDrawer(){const d=document.getElementById('ctaDrawer');d.classList.toggle('open');}
+
+let selectedOption=null;
+const PAYMENT_URLS={basic:'#',plus:'#'};
+
+function openDrawer(opt){
+  const d=document.getElementById('ctaDrawer');
+  d.classList.add('open');
+  if(opt) selectOption(opt);
+}
+
+function selectOption(opt){
+  selectedOption=opt;
+  document.getElementById('drawerBasic').classList.toggle('featured', opt==='basic');
+  document.getElementById('drawerPlus').classList.toggle('featured', opt==='plus');
+  document.getElementById('drawerBasic').style.borderColor = opt==='basic' ? 'var(--lime)' : '#333';
+  document.getElementById('drawerPlus').style.borderColor = opt==='plus' ? 'var(--lime)' : '#333';
+  const btn=document.getElementById('drawerCtaBtn');
+  btn.style.display='block';
+  btn.textContent= opt==='basic' ? 'AI 만원클럽 신청하기 →' : 'AI 만원클럽 PLUS 신청하기 →';
+}
+
+function goToPayment(){
+  if(!selectedOption) return;
+  const url=PAYMENT_URLS[selectedOption];
+  if(url && url!=='#') window.location.href=url;
+  else alert('결제 링크 준비 중입니다!');
+}
+
+function toggleFaq(el){
+  const ans=el.querySelector('.faq-a');
+  const arrow=el.querySelector('.faq-arrow');
+  const isOpen=el.classList.contains('faq-open');
+  document.querySelectorAll('.faq-toggle.faq-open').forEach(item=>{
+    item.classList.remove('faq-open');
+    item.querySelector('.faq-a').style.maxHeight='0';
+    item.querySelector('.faq-a').style.opacity='0';
+    item.querySelector('.faq-arrow').style.transform='rotate(0deg)';
+  });
+  if(!isOpen){
+    el.classList.add('faq-open');
+    ans.style.maxHeight=ans.scrollHeight+'px';
+    ans.style.opacity='1';
+    arrow.style.transform='rotate(180deg)';
+  }
+}
+
+function revealOnScroll(){document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight*0.9)el.classList.add('visible');});}
+window.addEventListener('scroll',revealOnScroll);setTimeout(revealOnScroll,100);
+</script>
+</body>
+</html>
