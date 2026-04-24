@@ -54,6 +54,7 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 .claude-opt .opt-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
 .claude-opt .opt-body{}
 .claude-opt .opt-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
 
 /* 선택된 상품 뱃지 */
 .option-badge{display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;color:#ccc;margin-bottom:28px;}
@@ -69,14 +70,10 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
 /* 뒤로가기 버튼 */
 .back-btn{font-size:20px;color:#666;cursor:pointer;background:none;border:none;line-height:1;padding:4px;}
 
-/* opt-desc */
-.claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
-
 /* 하단 버튼 */
 .btn-wrap{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(to top, #0d0d0d 70%, transparent);z-index:50;}
 .btn-next{width:100%;max-width:480px;margin:0 auto;display:block;background:var(--lime);color:var(--black);font-size:17px;font-weight:800;padding:16px;border-radius:14px;border:none;cursor:pointer;transition:opacity 0.2s;}
 .btn-next:disabled{opacity:0.3;cursor:default;}
-.btn-next.loading{opacity:0.6;}
 </style>
 </head>
 <body>
@@ -115,7 +112,7 @@ body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo
       <input type="email" id="inputEmail" placeholder="example@email.com" />
     </div>
 
-    <!-- 아이디어 강조 인풋 -->
+    <!-- 지원동기 강조 인풋 -->
     <div class="idea-field">
       <div class="idea-label">✨ 이 클럽을 왜 신청하셨나요?</div>
       <div class="idea-sub">한 줄로 자유롭게 적어주세요!</div>
@@ -179,15 +176,15 @@ const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwZ6fbO8P8CMQJjHk1z-v
 const CLAUDE_LABELS = ['처음이에요', '써본 적 있어요', '다양하게 해봤어요'];
 
 const params = new URLSearchParams(window.location.search);
-const selectedProductOption = params.get('option') || 'basic'; // 고정값 — 변경 안 함
+const selectedProductOption = params.get('option') || 'basic';
 let currentStep = 1;
 let selectedClaude = -1;
-let savedRowIndex = -1; // 1페이지 저장 후 받은 행 번호
+let savedRowIndex = -1;
 
 window.onload = function(){
   document.getElementById('optionBadgeText').textContent =
     selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽';
-  document.getElementById('backBtn').style.visibility = 'hidden'; // 1페이지엔 뒤로가기 숨김
+  document.getElementById('backBtn').style.visibility = 'hidden';
   setupStep1Validation();
 };
 
@@ -232,7 +229,6 @@ function selectClaude(idx){
   document.querySelectorAll('.claude-opt').forEach((el,i)=>{
     el.classList.toggle('selected', i===idx);
   });
-  // 처음이에요 선택 시 입문반 추천 배너 표시 (옵션값은 변경 안 함)
   const banner = document.getElementById('plusBanner');
   if(idx === 0){
     banner.classList.add('show');
@@ -251,7 +247,6 @@ function handleNext(){
 }
 
 function goToStep2(){
-  // 1페이지 데이터 먼저 시트에 저장
   const btn = document.getElementById('btnNext');
   btn.disabled = true;
   btn.textContent = '저장 중...';
