@@ -415,12 +415,12 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 <!-- ① 히어로 -->
 <div class="hero-section reveal">
   <div class="hero-tag">🚀 AI 만원클럽 1기 모집</div>
-  <h1 class="hero-title">아이디어만 있으면,<br><span class="lime">만들 수 있어요</span></h1>
+  <h1 class="hero-title"><span class="lime">AI로 4주만에</span><br>첫 수익을 만드는<br>만원클럽</h1>
   <p class="hero-sub">4주 안에 만들고, 배포하고, 첫 수익까지.<br><span style="color:var(--lime);font-size:0.9em;">코딩은 AI가 해요.</span></p>
   <div class="hero-btns">
     <button class="btn-white" onclick="toggleDrawer()">지금 신청하기</button>
   </div>
-  <div class="hero-recruit">🚀 1기 50명 모집중 · 5/16 개강 · <span>얼리버드 199,000원</span></div>
+  <div class="hero-recruit">🚀 1기 50명 모집중 · 5/16(토) 개강</div>
 </div>
 
 <!-- ② 교육 개요 -->
@@ -439,8 +439,27 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 <!-- ③ 그런데 -->
 <section class="reveal grunde-section">
   <div class="grunde-inner">
-    <div class="grunde-vibe">바이브<br>코딩</div>
-    <div class="grunde-sub">대부분 여기서 <strong style="color:var(--white);">포기합니다</strong></div>
+    <div class="grunde-vibe" style="font-size:42px;margin-bottom:6px;">아직도 클로드를<br><span style="color:var(--lime);">채팅 친구로만</span><br>쓰시나요?</div>
+    <div class="grunde-sub">AI 1인 창업이 대세라는데, <strong style="color:var(--white);">시작이 막막하신가요?</strong></div>
+
+    <!-- 페르소나 미니박스 -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px 18px;text-align:left;border-left:3px solid var(--lime);">
+        <div style="font-size:12px;color:var(--lime);font-weight:700;margin-bottom:6px;">5년차 IT 직장인</div>
+        <div style="font-size:14px;color:#ddd;line-height:1.6;">"아이디어는 있는데, 개발 경험이 없어서 어렵게 느껴져요"</div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px 18px;text-align:left;border-left:3px solid #ffb400;">
+        <div style="font-size:12px;color:#ffb400;font-weight:700;margin-bottom:6px;">부업 도전 중인 직장인</div>
+        <div style="font-size:14px;color:#ddd;line-height:1.6;">"유튜브로 바이브코딩 배웠는데 막상 혼자 하려니 어디서 멈추는지 모르겠어요"</div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px 18px;text-align:left;border-left:3px solid #ff6400;">
+        <div style="font-size:12px;color:#ff6400;font-weight:700;margin-bottom:6px;">프리랜서 디자이너</div>
+        <div style="font-size:14px;color:#ddd;line-height:1.6;">"클로드 Pro 구독했는데 결국 채팅으로만 쓰고 있어요. 서비스 만드는 건 다른 얘기 같고..."</div>
+      </div>
+    </div>
+
+    <div style="font-size:28px;font-weight:900;color:#fff;text-align:center;margin-bottom:8px;">대부분 여기서 <span style="color:#ff3c3c;">포기합니다</span></div>
+    <div style="font-size:15px;color:#777;text-align:center;margin-bottom:32px;">혼자서는 막히는 지점이 생기기 마련이에요</div>
     <div class="grunde-flow">
       <div class="grunde-step success">
         <div class="grunde-face">😊</div>
@@ -636,20 +655,6 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
   </div>
 </section>
 
-<!-- ⑥ 타겟 -->
-<section class="reveal">
-  <div class="target-intro">
-    <div class="ti-label">혹시 이런 분 아닌가요?</div>
-    <div class="ti-title">이런 분이라면,<br>딱이에요</div>
-  </div>
-  <div class="target-rank-list">
-    <div class="target-rank-item"><div class="rank-medal">🥇</div><div class="rank-text"><span>아이디어는 있는데</span> 개발자가 없어서 그냥 묻어둔 분</div></div>
-    <div class="target-rank-item"><div class="rank-medal">🥈</div><div class="rank-text"><span>부업·창업을 꿈꾸지만</span> 뭐부터 시작할지 막막한 분</div></div>
-    <div class="target-rank-item"><div class="rank-medal">🥉</div><div class="rank-text"><span>코딩 독학</span>을 몇 번 시도했지만 결국 포기한 분</div></div>
-    <div class="target-rank-item"><div class="rank-medal">4️⃣</div><div class="rank-text"><span>AI 도구</span>를 써봤는데 어디서부터 어떻게 써야 할지 모르는 분</div></div>
-  </div>
-</section>
-
 <!-- ⑦ 진행방식 -->
 <section class="reveal section-white">
   <div class="how-intro">
@@ -657,322 +662,94 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
     <div class="hi-title">클럽 운영 방식</div>
     <div class="hi-desc">강의만 듣다 끝나지 않아요.<br>만들고, 배포하고, 수익까지 가는<br><strong>구조예요.</strong></div>
   </div>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-card-icon">💬</div>
-      <div class="how-card-body">
-        <h4>슬랙 팀 커뮤니티</h4>
-        <p>팀별 전용 채널 + 공지·질문·잡담방으로 운영돼요. 혼자 막히는 순간 없이 <span style="color:#7c4dff;font-weight:700;">동료들과 함께 돌파</span>해요.</p>
-        <div class="how-tag">Slack 커뮤니티</div>
-      </div>
-    </div>
-    <div class="how-card">
-      <div class="how-card-icon">📖</div>
-      <div class="how-card-body">
-        <h4>주차별 학습 자료 + 팀 미팅</h4>
-        <p>매주 학습 가이드와 실습 미션이 제공돼요. <span style="color:#7c4dff;font-weight:700;">팀끼리 주 1회 이상 모여</span> 중간 상황을 공유해요.</p>
-        <div class="how-tag">주차별 가이드</div>
-      </div>
-    </div>
-    <div class="how-card">
-      <div class="how-card-icon">🙋</div>
-      <div class="how-card-body">
-        <h4>상시 질의응답</h4>
-        <p>막히는 코드, 방향 고민까지. <span style="color:#7c4dff;font-weight:700;">QnA 채널에서 언제든 질문</span>하면 빠르게 답변드려요.</p>
-        <div class="how-tag">상시 QnA</div>
-      </div>
-    </div>
-    <div class="how-card">
-      <div class="how-card-icon">🎙️</div>
-      <div class="how-card-body">
-        <h4>마케팅 특강 1회</h4>
-        <p>현직 <strong style="color:#0d0d0d;font-weight:900;">바이브코더·창업자</strong>가 직접 강연해요. <span style="color:#7c4dff;font-weight:700;">수익화 전략, 마케팅, 실제 사례</span>를 들을 수 있어요.</p>
-        <div class="how-tag">특강 1회 포함</div>
-      </div>
-    </div>
-    <div class="how-card">
-      <div class="how-card-icon">🏆</div>
-      <div class="how-card-body">
-        <h4>리더보드 & 데일리 인증</h4>
-        <p>개인·팀 미션 점수를 실시간으로 확인해요. <span style="color:#7c4dff;font-weight:700;">데일리 모각AI 인증</span>으로 실행력을 유지해요.</p>
-        <div class="how-tag">리더보드 운영</div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- 핵심 3가지 목업 카드 -->
+  <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px;">
 
-<!-- ⑧ 커리큘럼 - AI 만원클럽 -->
-<section class="reveal">
-  <div class="curr-intro">
-    <div class="ci-label">커리큘럼</div>
-    <div class="ci-title">AI 만원클럽</div>
-  </div>
-  <div class="prog-wrap">
-    <div class="prog-block">
-      <p class="prog-hook">4주 안에 만들고, 배포하고, 첫 수익까지</p>
-      <p class="prog-sub">Claude Code 기반 4주 실전 과정 · 커뮤니티</p>
-      <div class="prog-journey">
-        <div class="journey-step">
-          <div class="journey-dot"></div>
-          <div class="journey-content">
-            <div class="journey-week">개강일 · 5/16(토)</div>
-            <h4>OT + 팀 매칭 + 미니과제</h4>
-            <p>클럽 오리엔테이션 후 팀 배정. 5가지 주제 중 하나를 골라 미니 서비스를 직접 만들어봐요. 빠른 성취감을 느끼는 첫날이에요.</p>
-          </div>
+    <!-- 목업 1: 팀 미팅 -->
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;overflow:hidden;">
+      <!-- 목업 이미지 영역 -->
+      <div style="background:#111;height:160px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #2a2a2a;position:relative;overflow:hidden;">
+        <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div style="width:56px;height:56px;border-radius:12px;background:#1e1e1e;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:22px;">👤</div>
+          <div style="width:56px;height:56px;border-radius:12px;background:#1e1e1e;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:22px;">👤</div>
+          <div style="width:56px;height:56px;border-radius:12px;background:rgba(200,255,0,0.15);border:1.5px solid rgba(200,255,0,0.4);display:flex;align-items:center;justify-content:center;font-size:22px;">🙋</div>
+          <div style="width:56px;height:56px;border-radius:12px;background:#1e1e1e;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:22px;">👤</div>
+          <div style="width:56px;height:56px;border-radius:12px;background:#1e1e1e;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:22px;">👤</div>
         </div>
-        <div class="journey-step">
-          <div class="journey-dot"></div>
-          <div class="journey-content">
-            <div class="journey-week">**1주차** · MAKE</div>
-            <h4>아이디어 구체화 → 기획 완료</h4>
-            <p>타겟·페인포인트·BM을 정리해 1페이지 기획안을 완성해요. 내 아이디어가 실제 서비스 스펙으로 바뀌는 주차예요.</p>
+        <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(200,255,0,0.9);color:#000;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;">주 1회 팀 미팅 진행 중</div>
+      </div>
+      <div style="padding:20px;">
+        <div style="font-size:11px;font-weight:800;color:#7c4dff;letter-spacing:2px;margin-bottom:8px;">핵심 01</div>
+        <h4 style="font-size:18px;font-weight:900;color:#fff;margin-bottom:8px;">5인 팀 미팅 + 슬랙 커뮤니티</h4>
+        <p style="font-size:14px;color:#888;line-height:1.6;">팀별 전용 채널에서 매주 진행 상황 공유. 혼자 막히는 순간 없이 동료들과 함께 돌파해요.</p>
+      </div>
+    </div>
+
+    <!-- 목업 2: 노션 자료집 -->
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;overflow:hidden;">
+      <div style="background:#111;height:160px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #2a2a2a;padding:16px;">
+        <div style="width:100%;max-width:320px;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <div style="font-size:16px;">📋</div>
+            <div style="font-size:13px;font-weight:700;color:#fff;">AI 만원클럽 1기 자료집</div>
           </div>
-        </div>
-        <div class="journey-step">
-          <div class="journey-dot"></div>
-          <div class="journey-content">
-            <div class="journey-week">**2주차** · MAKE</div>
-            <h4>MVP 제작 완료 + 배포</h4>
-            <p>Claude Code로 실제 작동하는 서비스를 만들고 배포해요. 이 주가 끝나면 내 서비스 URL이 생겨요.</p>
-          </div>
-        </div>
-        <div class="journey-step">
-          <div class="journey-dot"></div>
-          <div class="journey-content">
-            <div class="journey-week">**3주차** · GROW</div>
-            <h4>마케팅 특강 + 유통 채널 세팅</h4>
-            <p>마케팅 계정 세팅, 유저 인터뷰, 채널별 전략까지. 만든 것을 세상에 알리는 주차예요.</p>
-          </div>
-        </div>
-        <div class="journey-step">
-          <div class="journey-dot active"></div>
-          <div class="journey-content">
-            <div class="journey-week">**4주차** · GROW</div>
-            <h4>이터레이션 + 수익화 시도</h4>
-            <p>마케팅을 반복하며 첫 유저와 첫 수익을 만들어요. 4주의 마지막엔 데모데이에서 결과물을 발표해요.</p>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--lime);flex-shrink:0;"></div>
+              <div style="font-size:12px;color:#888;">📁 1주차 · 아이디어 구체화 가이드</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--lime);flex-shrink:0;"></div>
+              <div style="font-size:12px;color:#888;">📁 2주차 · MVP 제작 템플릿</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:#555;flex-shrink:0;"></div>
+              <div style="font-size:12px;color:#555;">🔒 3주차 · 마케팅 전략 (공개 예정)</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ⑨ AI 만원클럽 신청 카드 -->
-<section class="reveal">
-  <div class="price-grid">
-    <div class="price-card featured">
-      <div class="pc-badge">추천</div>
-      <h4>AI 만원클럽</h4>
-      <div class="pc-price">199,000원</div>
-      <div class="pc-original">정가 269,000원</div>
-      <ul><li>4주 커리큘럼 전체</li><li>커뮤니티 입장</li><li>QnA 채널 이용</li><li>데모데이 참가</li></ul>
-      <button class="pc-btn" style="background:var(--lime);color:var(--black);" onclick="openDrawer('basic')">신청하기</button>
-    </div>
-  </div>
-</section>
-
-<!-- 브릿지 - Claude Code 처음이라면 -->
-<section class="reveal bridge-solo-section">
-  <div class="bridge-solo-inner">
-    <div class="bs-emoji">🤔</div>
-    <div class="bs-title">Claude Code가<br><span>아예 처음</span>이라면?</div>
-    <div class="bs-desc"><strong>온보딩 클래스</strong>가 포함된<br>AI 만원클럽 PLUS를 추천드려요!</div>
-  </div>
-</section>
-
-<!-- ⑩-B PLUS 신청 카드 -->
-<section class="reveal" style="padding-top:16px;">
-  <div class="price-grid">
-    <div class="price-card" style="padding:32px 28px;">
-      <div style="background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:12px;padding:20px 18px;margin-bottom:20px;">
-        <p style="font-size:20px;font-weight:900;color:var(--white);margin-bottom:6px;">처음부터 끝까지,<br>완주를 보장하는 패키지</p>
-        <p style="font-size:14px;color:#888;margin-bottom:14px;">만원클럽 전체 + 온보딩 클래스 + 튜터 1:1 피드백 + 데모데이</p>
-        <div class="onboarding-note"><span>✅ 온보딩 클래스 포함 — 개강 전 Claude Code 기초를 완전 정복하는 1일 집중 과정이 포함되어 있어요!</span></div>
+      <div style="padding:20px;">
+        <div style="font-size:11px;font-weight:800;color:#7c4dff;letter-spacing:2px;margin-bottom:8px;">핵심 02</div>
+        <h4 style="font-size:18px;font-weight:900;color:#fff;margin-bottom:8px;">주차별 자료집 + 미션</h4>
+        <p style="font-size:14px;color:#888;line-height:1.6;">매주 학습 가이드·템플릿·실습 미션이 노션 자료집으로 제공돼요. 커리큘럼 따라 착실히 완주하면 돼요.</p>
       </div>
-      <div class="pc-badge" style="background:var(--black3);color:var(--lime);border:1px solid rgba(200,255,0,0.3);">PLUS</div>
-      <h4>AI 만원클럽 PLUS</h4>
-      <div class="pc-price">249,000원</div>
-      <div class="pc-original">정가 309,000원</div>
-      <ul><li>4주 커리큘럼 전체</li><li>온보딩 클래스 1일 ✨</li><li>튜터 1:1 피드백</li><li>데모데이 참가</li></ul>
-      <button class="pc-btn" style="background:transparent;color:var(--lime);border:1px solid var(--lime);" onclick="openDrawer('plus')">신청하기</button>
     </div>
-  </div>
-</section>
 
-<!-- ⑪ 합류 케어 -->
-<section class="reveal weekly-care-section">
-  <div class="weekly-care-inner">
-    <div class="care-char-wrap">
-      <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="12" y="16" width="40" height="30" rx="2" fill="#E05A1B"/>
-        <rect x="4" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
-        <rect x="52" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
-        <rect x="18" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
-        <rect x="36" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
-        <rect x="20" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
-        <rect x="36" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
-      </svg>
-      <div class="care-char-label">합류 직후부터 시작되는 케어 시스템</div>
-    </div>
-    <div class="weekly-care-label">합류 케어</div>
-    <div class="weekly-care-title">처음이어도<br>절대</div>
-    <div class="weekly-care-subtitle">혼자 두지 않아요</div>
-    <div class="weekly-care-sub">합류 직후부터 이뤄지는 단계별 학습 케어 시스템<br><span style="color:#555;font-size:13px;">(상세 내용 추가 예정)</span></div>
-    <div class="weekly-timeline">
-      <div class="weekly-item">
-        <div class="weekly-dot on"></div>
-        <div class="weekly-content">
-          <div class="weekly-week">D-DAY 0 · 합류 직후 <span class="plus-badge">PLUS 전용</span></div>
-          <h4>웰컴 온보딩 패키지</h4>
-          <p>슬랙 채널 안내, 개발 환경 세팅 가이드, 첫 미션 발송. AI 만원클럽 PLUS 수강생에게만 제공됩니다.</p>
-          <div class="weekly-badge">PLUS 전용</div>
+    <!-- 목업 3: 데모데이 -->
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;overflow:hidden;">
+      <div style="background:#111;height:160px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #2a2a2a;">
+        <div style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:8px;">🏆</div>
+          <div style="font-size:13px;font-weight:800;color:var(--lime);">6/13(토) 오프라인</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">서울 강남 · 아남타워 3층</div>
         </div>
       </div>
-      <div class="weekly-item">
-        <div class="weekly-dot on"></div>
-        <div class="weekly-content">
-          <div class="weekly-week">WEEK 1 · 기초 케어</div>
-          <h4>기초 학습 밀착 지원</h4>
-          <p>Claude Code 첫 사용부터 챙깁니다. 막히면 QnA, 진도 체크, 1:1 피드백까지.</p>
-          <div class="weekly-badge">주차별 가이드</div>
-        </div>
+      <div style="padding:20px;">
+        <div style="font-size:11px;font-weight:800;color:#7c4dff;letter-spacing:2px;margin-bottom:8px;">핵심 03</div>
+        <h4 style="font-size:18px;font-weight:900;color:#fff;margin-bottom:8px;">데모데이 & 종강파티</h4>
+        <p style="font-size:14px;color:#888;line-height:1.6;">4주의 마지막, 직접 무대에 서요. 팀별 발표·시상·네트워킹까지. <span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
       </div>
-      <div class="weekly-item">
-        <div class="weekly-dot"></div>
-        <div class="weekly-content">
-          <div class="weekly-week">WEEK 2~3 · 빌드 케어</div>
-          <h4>내 서비스 만들기 집중 지원</h4>
-          <p>실제 개발 중 막히는 포인트를 함께 해결합니다. (상세 내용 추가 예정)</p>
-          <div class="weekly-badge">커뮤니티 Q&A</div>
-        </div>
+    </div>
+  </div>
+
+  <!-- 나머지 운영 요소 축약 리스트 -->
+  <div style="background:#141414;border:1px solid #222;border-radius:16px;padding:20px;">
+    <div style="font-size:12px;font-weight:800;color:#555;letter-spacing:2px;margin-bottom:14px;">그 외에도</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#aaa;">
+        <span style="font-size:18px;">🙋</span> 슬랙 QnA 채널 상시 운영 (24시간 내 답변)
       </div>
-      <div class="weekly-item">
-        <div class="weekly-dot"></div>
-        <div class="weekly-content">
-          <div class="weekly-week">WEEK 4 · 런치 케어</div>
-          <h4>배포 &amp; 데모데이</h4>
-          <p>서비스 완성, 배포, 첫 유저 모집까지. (상세 내용 추가 예정)</p>
-          <div class="weekly-badge">데모데이</div>
-        </div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#aaa;">
+        <span style="font-size:18px;">🎙️</span> 현직 바이브코더 마케팅 특강 1회
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#aaa;">
+        <span style="font-size:18px;">📊</span> 개인·팀 리더보드 실시간 운영
       </div>
     </div>
   </div>
 </section>
 
-<!-- ⑫ 수료 후 -->
-<section class="reveal">
-  <div class="output-intro">
-    <div class="oi-label">4주 후 달라지는 것들</div>
-    <div class="oi-title">4주 뒤,<br>손에 남는 것들이에요</div>
-    <div class="oi-desc">만들고, 배포하고, 수익까지.<br>전 과정을 직접 경험해요.</div>
-  </div>
-  <div class="output-circle-wrap" style="overflow:visible;">
-    <div class="oc-ring"></div>
-    <div class="oc-center">나의<br>서비스</div>
-    <div class="oc-node" style="top:4%;left:50%;"><div class="oc-node-icon">💡</div><div class="oc-node-label">아이디어</div></div>
-    <div class="oc-node" style="top:32%;left:95%;"><div class="oc-node-icon">🤖</div><div class="oc-node-label">AI 개발</div></div>
-    <div class="oc-node" style="top:80%;left:78%;"><div class="oc-node-icon">🚀</div><div class="oc-node-label">배포</div></div>
-    <div class="oc-node" style="top:80%;left:22%;"><div class="oc-node-icon">📣</div><div class="oc-node-label">마케팅</div></div>
-    <div class="oc-node" style="top:32%;left:5%;"><div class="oc-node-icon">💰</div><div class="oc-node-label">수익화</div></div>
-  </div>
-  <div class="output-cards">
-    <div class="output-card"><div class="oc-icon">📱</div><div><h4>배포된 내 서비스</h4><p>실제 URL이 있고, 누구에게나 링크를 보낼 수 있는 내 서비스가 생겨요.</p><div class="oc-tag">배포 완료</div></div></div>
-    <div class="output-card"><div class="oc-icon">💰</div><div><h4>첫 수익 경험</h4><p>결제 기능을 붙이고, 실제 고객을 만날 수 있는 상태까지 가요. 첫 만원이 전부를 바꿔요.</p><div class="oc-tag">수익 연결</div></div></div>
-    <div class="output-card"><div class="oc-icon">🧠</div><div><h4>AI로 일하는 방식</h4><p>코딩이 아니라 기획·실행·운영 전체를 AI와 함께 하는 법을 몸에 익혀요.</p><div class="oc-tag">워크플로우 전환</div></div></div>
-  </div>
-</section>
-
-<!-- 데모데이/종강파티 -->
-<section class="reveal">
-  <div style="text-align:center;padding-bottom:28px;">
-    <div class="section-label" style="font-size:13px !important;">마지막 날</div>
-    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:12px;">4주의 마지막,<br>직접 무대에<br>서요.</div>
-    <div style="font-size:16px;color:#bbb;line-height:1.7;">6월 13일 토요일 · 오프라인</div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
-      <div style="font-size:36px;margin-bottom:12px;">🏆</div>
-      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">데모데이</h4>
-      <p style="font-size:14px;color:#bbb;line-height:1.6;">팀별 결과물 발표 & 시상식<br><span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
-    </div>
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
-      <div style="font-size:36px;margin-bottom:12px;">🎊</div>
-      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">종강파티</h4>
-      <p style="font-size:14px;color:#bbb;line-height:1.6;">수료자 전원 초대<br>네트워킹 파티</p>
-    </div>
-  </div>
-</section>
-
-<!-- 참여혜택 -->
-<section class="reveal">
-  <div style="text-align:center;margin-bottom:32px;">
-    <div class="section-label" style="font-size:13px !important;">참여하면 드려요</div>
-    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;">1기 특별 혜택</div>
-  </div>
-
-  <!-- 1기 참석 혜택 -->
-  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">1기 참석 혜택</div>
-  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">🌐</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">도메인 1년 무료</h4>
-        <p style="font-size:14px;color:#bbb;">내 서비스 주소가 생겨요. <span style="color:var(--lime);font-weight:700;">15,000원 상당</span></p>
-      </div>
-    </div>
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">🎙️</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">마케팅 특강 1회</h4>
-        <p style="font-size:14px;color:#bbb;">현직 바이브코더·창업자 직강. 수익화 전략 실전 공개</p>
-      </div>
-    </div>
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">🏆</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">데모데이 참가</h4>
-        <p style="font-size:14px;color:#bbb;">6/13 오프라인 발표 & 시상. <span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 수료자 혜택 -->
-  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">수료자 혜택</div>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">📚</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">교육자료 평생 소장</h4>
-        <p style="font-size:14px;color:#bbb;">모든 커리큘럼 자료를 영구적으로 보관해요</p>
-      </div>
-    </div>
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">🎓</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">수료 인증서</h4>
-        <p style="font-size:14px;color:#bbb;">AI 만원클럽 1기 수료 공식 인증서 발급</p>
-      </div>
-    </div>
-    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:36px;flex-shrink:0;">👥</div>
-      <div>
-        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">알럼나이 & 빌더 커뮤니티</h4>
-        <p style="font-size:14px;color:#bbb;">수료 후에도 계속되는 동료 네트워크</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ⑬ 한정인원 -->
-<section class="reveal" style="padding-top:0;">
-  <div class="seats-section">
-    <h2>⚡ 1기 마감 임박</h2>
-    <p class="seats-sub">선착순 50명 정원 · 마감 후 다음 기수 일정 미정</p>
-    <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
-    <div class="seats-count"><span>73%</span> 마감 · 남은 자리 <span>14석</span></div>
-    <button class="seats-cta-btn" onclick="toggleDrawer()">지금 바로 신청하기 →</button>
-  </div>
-</section>
 
 <!-- ⑮ 수강생 후기 -->
 <section class="reveal" style="max-width:100%;padding:60px 0;background:#0d0d0d;overflow:hidden;">
@@ -1291,6 +1068,286 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
     </div>
   </div>
 </section>
+<!-- ⑧ 커리큘럼 - AI 만원클럽 -->
+<section class="reveal">
+  <div class="curr-intro">
+    <div class="ci-label">커리큘럼</div>
+    <div class="ci-title">AI 만원클럽</div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-block">
+      <p class="prog-hook">4주 안에 만들고, 배포하고, 첫 수익까지</p>
+      <p class="prog-sub">Claude Code 기반 4주 실전 과정 · 커뮤니티</p>
+      <div class="prog-journey">
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">개강일 · 5/16(토)</div>
+            <h4>OT + 팀 매칭 + 미니과제</h4>
+            <p>클럽 오리엔테이션 후 팀 배정. 5가지 주제 중 하나를 골라 미니 서비스를 직접 만들어봐요. 빠른 성취감을 느끼는 첫날이에요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**1주차** · MAKE</div>
+            <h4>아이디어 구체화 → 기획 완료</h4>
+            <p>타겟·페인포인트·BM을 정리해 1페이지 기획안을 완성해요. 내 아이디어가 실제 서비스 스펙으로 바뀌는 주차예요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**2주차** · MAKE</div>
+            <h4>MVP 제작 완료 + 배포</h4>
+            <p>Claude Code로 실제 작동하는 서비스를 만들고 배포해요. 이 주가 끝나면 내 서비스 URL이 생겨요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot"></div>
+          <div class="journey-content">
+            <div class="journey-week">**3주차** · GROW</div>
+            <h4>마케팅 특강 + 유통 채널 세팅</h4>
+            <p>마케팅 계정 세팅, 유저 인터뷰, 채널별 전략까지. 만든 것을 세상에 알리는 주차예요.</p>
+          </div>
+        </div>
+        <div class="journey-step">
+          <div class="journey-dot active"></div>
+          <div class="journey-content">
+            <div class="journey-week">**4주차** · GROW</div>
+            <h4>이터레이션 + 수익화 시도</h4>
+            <p>마케팅을 반복하며 첫 유저와 첫 수익을 만들어요. 4주의 마지막엔 데모데이에서 결과물을 발표해요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑨ AI 만원클럽 신청 카드 -->
+<section class="reveal">
+  <div class="price-grid">
+    <div class="price-card featured">
+      <div class="pc-badge">추천</div>
+      <h4>AI 만원클럽</h4>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div class="pc-price" style="margin-bottom:0;">199,000원</div>
+        <div style="background:#ff3c3c;color:#fff;font-size:13px;font-weight:900;padding:4px 10px;border-radius:8px;">26% OFF</div>
+      </div>
+      <div class="pc-original">정가 269,000원</div>
+      <ul><li>4주 커리큘럼 전체</li><li>커뮤니티 입장</li><li>QnA 채널 이용</li><li>데모데이 참가</li></ul>
+      <button class="pc-btn" style="background:var(--lime);color:var(--black);" onclick="openDrawer('basic')">신청하기</button>
+    </div>
+  </div>
+</section>
+
+<!-- 브릿지 - Claude Code 처음이라면 -->
+<section class="reveal bridge-solo-section">
+  <div class="bridge-solo-inner">
+    <div class="bs-emoji">🤔</div>
+    <div class="bs-title">Claude Code가<br><span>아예 처음</span>이라면?</div>
+    <div class="bs-desc"><strong>온보딩 클래스</strong>가 포함된<br>AI 만원클럽 입문을 추천드려요!</div>
+  </div>
+</section>
+
+<!-- ⑩-B PLUS 신청 카드 -->
+<section class="reveal" style="padding-top:16px;">
+  <div class="price-grid">
+    <div class="price-card" style="padding:32px 28px;">
+      <div style="background:rgba(200,255,0,0.06);border:1px solid rgba(200,255,0,0.2);border-radius:12px;padding:20px 18px;margin-bottom:20px;">
+        <p style="font-size:20px;font-weight:900;color:var(--white);margin-bottom:6px;">처음부터 끝까지,<br>완주를 보장하는 패키지</p>
+        <p style="font-size:14px;color:#888;margin-bottom:14px;">만원클럽 전체 + 온보딩 클래스 + 튜터 1:1 피드백 + 데모데이</p>
+        <div class="onboarding-note"><span>✅ 온보딩 클래스 포함 — 개강 전 Claude Code 기초를 완전 정복하는 1일 집중 과정이 포함되어 있어요!</span></div>
+      </div>
+      <div class="pc-badge" style="background:var(--black3);color:var(--lime);border:1px solid rgba(200,255,0,0.3);">입문</div>
+      <h4>AI 만원클럽 입문</h4>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+        <div class="pc-price" style="margin-bottom:0;">249,000원</div>
+        <div style="background:#ff3c3c;color:#fff;font-size:13px;font-weight:900;padding:4px 10px;border-radius:8px;">19% OFF</div>
+      </div>
+      <div class="pc-original">정가 309,000원</div>
+
+<!-- 참여혜택 -->
+<section class="reveal">
+  <div style="text-align:center;margin-bottom:32px;">
+    <div class="section-label" style="font-size:13px !important;">참여하면 드려요</div>
+    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;">1기 특별 혜택</div>
+  </div>
+
+  <!-- 1기 참석 혜택 -->
+  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">1기 참석 혜택</div>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🌐</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">도메인 1년 무료</h4>
+        <p style="font-size:14px;color:#bbb;">내 서비스 주소가 생겨요. <span style="color:var(--lime);font-weight:700;">15,000원 상당</span></p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🎙️</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">마케팅 특강 1회</h4>
+        <p style="font-size:14px;color:#bbb;">현직 바이브코더·창업자 직강. 수익화 전략 실전 공개</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🏆</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">데모데이 참가</h4>
+        <p style="font-size:14px;color:#bbb;">6/13 오프라인 발표 & 시상. <span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수료자 혜택 -->
+  <div style="margin-bottom:12px;font-size:12px;font-weight:700;color:var(--lime);letter-spacing:2px;">수료자 혜택</div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">📚</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">교육자료 평생 소장</h4>
+        <p style="font-size:14px;color:#bbb;">모든 커리큘럼 자료를 영구적으로 보관해요</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">🎓</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">수료 인증서</h4>
+        <p style="font-size:14px;color:#bbb;">AI 만원클럽 1기 수료 공식 인증서 발급</p>
+      </div>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;padding:22px 20px;display:flex;align-items:center;gap:16px;">
+      <div style="font-size:36px;flex-shrink:0;">👥</div>
+      <div>
+        <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px;">알럼나이 & 빌더 커뮤니티</h4>
+        <p style="font-size:14px;color:#bbb;">수료 후에도 계속되는 동료 네트워크</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <ul><li>4주 커리큘럼 전체</li><li>온보딩 클래스 1일 ✨</li><li>튜터 1:1 피드백</li><li>데모데이 참가</li></ul>
+      <button class="pc-btn" style="background:transparent;color:var(--lime);border:1px solid var(--lime);" onclick="openDrawer('plus')">신청하기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ⑪ 합류 케어 -->
+<section class="reveal weekly-care-section">
+  <div class="weekly-care-inner">
+    <div class="care-char-wrap">
+      <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="12" y="16" width="40" height="30" rx="2" fill="#E05A1B"/>
+        <rect x="4" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
+        <rect x="52" y="24" width="8" height="8" rx="1" fill="#E05A1B"/>
+        <rect x="18" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
+        <rect x="36" y="46" width="10" height="10" rx="1" fill="#E05A1B"/>
+        <rect x="20" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
+        <rect x="36" y="24" width="8" height="10" rx="1" fill="#1a0a00"/>
+      </svg>
+      <div class="care-char-label">합류 직후부터 시작되는 케어 시스템</div>
+    </div>
+    <div class="weekly-care-label">합류 케어</div>
+    <div class="weekly-care-title">처음이어도<br>절대</div>
+    <div class="weekly-care-subtitle">혼자 두지 않아요</div>
+    <div class="weekly-care-sub">합류 직후부터 이뤄지는 단계별 학습 케어 시스템<br><span style="color:#555;font-size:13px;">(상세 내용 추가 예정)</span></div>
+    <div class="weekly-timeline">
+      <div class="weekly-item">
+        <div class="weekly-dot on"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">D-DAY 0 · 합류 직후 <span class="plus-badge">입문 전용</span></div>
+          <h4>웰컴 온보딩 패키지</h4>
+          <p>슬랙 채널 안내, 개발 환경 세팅 가이드, 첫 미션 발송. AI 만원클럽 입문 수강생에게만 제공됩니다.</p>
+          <div class="weekly-badge">입문 전용</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot on"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 1 · 기초 케어</div>
+          <h4>기초 학습 밀착 지원</h4>
+          <p>Claude Code 첫 사용부터 챙깁니다. 막히면 QnA, 진도 체크, 1:1 피드백까지.</p>
+          <div class="weekly-badge">주차별 가이드</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 2~3 · 빌드 케어</div>
+          <h4>내 서비스 만들기 집중 지원</h4>
+          <p>실제 개발 중 막히는 포인트를 함께 해결합니다. (상세 내용 추가 예정)</p>
+          <div class="weekly-badge">커뮤니티 Q&A</div>
+        </div>
+      </div>
+      <div class="weekly-item">
+        <div class="weekly-dot"></div>
+        <div class="weekly-content">
+          <div class="weekly-week">WEEK 4 · 런치 케어</div>
+          <h4>배포 &amp; 데모데이</h4>
+          <p>서비스 완성, 배포, 첫 유저 모집까지. (상세 내용 추가 예정)</p>
+          <div class="weekly-badge">데모데이</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑫ 수료 후 -->
+<section class="reveal">
+  <div class="output-intro">
+    <div class="oi-label">4주 후 달라지는 것들</div>
+    <div class="oi-title">4주 뒤,<br>손에 남는 것들이에요</div>
+    <div class="oi-desc">만들고, 배포하고, 수익까지.<br>전 과정을 직접 경험해요.</div>
+  </div>
+  <div class="output-circle-wrap" style="overflow:visible;">
+    <div class="oc-ring"></div>
+    <div class="oc-center">나의<br>서비스</div>
+    <div class="oc-node" style="top:4%;left:50%;"><div class="oc-node-icon">💡</div><div class="oc-node-label">아이디어</div></div>
+    <div class="oc-node" style="top:32%;left:95%;"><div class="oc-node-icon">🤖</div><div class="oc-node-label">AI 개발</div></div>
+    <div class="oc-node" style="top:80%;left:78%;"><div class="oc-node-icon">🚀</div><div class="oc-node-label">배포</div></div>
+    <div class="oc-node" style="top:80%;left:22%;"><div class="oc-node-icon">📣</div><div class="oc-node-label">마케팅</div></div>
+    <div class="oc-node" style="top:32%;left:5%;"><div class="oc-node-icon">💰</div><div class="oc-node-label">수익화</div></div>
+  </div>
+  <div class="output-cards">
+    <div class="output-card"><div class="oc-icon">📱</div><div><h4>배포된 내 서비스</h4><p>실제 URL이 있고, 누구에게나 링크를 보낼 수 있는 내 서비스가 생겨요.</p><div class="oc-tag">배포 완료</div></div></div>
+    <div class="output-card"><div class="oc-icon">💰</div><div><h4>첫 수익 경험</h4><p>결제 기능을 붙이고, 실제 고객을 만날 수 있는 상태까지 가요. 첫 만원이 전부를 바꿔요.</p><div class="oc-tag">수익 연결</div></div></div>
+    <div class="output-card"><div class="oc-icon">🧠</div><div><h4>AI로 일하는 방식</h4><p>코딩이 아니라 기획·실행·운영 전체를 AI와 함께 하는 법을 몸에 익혀요.</p><div class="oc-tag">워크플로우 전환</div></div></div>
+  </div>
+</section>
+
+<!-- 데모데이/종강파티 -->
+<section class="reveal">
+  <div style="text-align:center;padding-bottom:28px;">
+    <div class="section-label" style="font-size:13px !important;">마지막 날</div>
+    <div style="font-size:46px;font-weight:900;color:var(--white);line-height:1.2;margin-bottom:12px;">4주의 마지막,<br>직접 무대에<br>서요.</div>
+    <div style="font-size:16px;color:#bbb;line-height:1.7;">6월 13일 토요일 · 오프라인</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:12px;">🏆</div>
+      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">데모데이</h4>
+      <p style="font-size:14px;color:#bbb;line-height:1.6;">팀별 결과물 발표 & 시상식<br><span style="color:var(--lime);font-weight:700;">1등 상금 30만원</span></p>
+    </div>
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:18px;padding:24px 18px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:12px;">🎊</div>
+      <h4 style="font-size:18px;font-weight:900;color:var(--white);margin-bottom:8px;">종강파티</h4>
+      <p style="font-size:14px;color:#bbb;line-height:1.6;">수료자 전원 초대<br>네트워킹 파티</p>
+    </div>
+  </div>
+</section>
+
+<!-- ⑬ 한정인원 -->
+<section class="reveal" style="padding-top:0;">
+  <div class="seats-section">
+    <h2>⚡ 1기 마감 임박</h2>
+    <p class="seats-sub">선착순 50명 정원 · 마감 후 다음 기수 일정 미정</p>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+    <div class="seats-count"><span>73%</span> 마감 · 남은 자리 <span>14석</span></div>
+    <button class="seats-cta-btn" onclick="toggleDrawer()">지금 바로 신청하기 →</button>
+  </div>
+</section>
+
 
 <!-- ⑮ FAQ -->
 <section class="reveal section-white">
@@ -1343,7 +1400,7 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
     </div>
     <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
       <div class="faq-q">옵션은 어떤 차이인가요? 뭘 고르면 되나요? <span class="faq-arrow">▼</span></div>
-      <div class="faq-a"><strong>AI 만원클럽</strong>: 클로드코드 이미 써보신 분이 선택하는 옵션<br><strong>AI 만원클럽 PLUS</strong>: 환경 세팅·기본 사용법부터 다지고 싶은 분 (온보딩 포함)</div>
+      <div class="faq-a"><strong>AI 만원클럽</strong>: 클로드코드 이미 써보신 분이 선택하는 옵션<br><strong>AI 만원클럽 입문</strong>: 환경 세팅·기본 사용법부터 다지고 싶은 분 (온보딩 포함)</div>
     </div>
     <div class="faq-item faq-toggle" onclick="toggleFaq(this)">
       <div class="faq-q">신청 이후 옵션을 변경할 수 있나요? <span class="faq-arrow">▼</span></div>
@@ -1485,6 +1542,21 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
 <!-- 푸터 -->
 <footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:40px 24px 120px;max-width:100%;">
   <div style="max-width:480px;margin:0 auto;">
+
+    <!-- 고객센터 -->
+    <div style="margin-bottom:32px;">
+      <div style="font-size:14px;font-weight:800;color:#ccc;margin-bottom:12px;">고객센터</div>
+      <div style="font-size:12px;color:#555;line-height:2;">
+        <div>채팅 상담 운영시간 :</div>
+        <div>월요일 14:00-17:30</div>
+        <div>화~금요일 10:30-17:30</div>
+        <div>(점심시간 12:30-14:00 / 주말, 공휴일 휴무)</div>
+      </div>
+      <a href="#" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--lime);text-decoration:none;">고객센터 바로가기</a>
+    </div>
+
+    <div style="border-top:1px solid #1e1e1e;padding-top:24px;margin-bottom:20px;"></div>
+
     <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;">팀스파르타 주식회사</div>
     <div style="font-size:12px;color:#555;margin-bottom:20px;">AI 만원클럽은 팀스파르타가 운영합니다.</div>
     <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#555;line-height:1.8;">
@@ -1495,9 +1567,9 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
       <div><span style="color:#777;">이메일</span>&nbsp;&nbsp;<a href="mailto:contact@teamsparta.co" style="color:#555;text-decoration:none;">contact@teamsparta.co</a></div>
     </div>
     <div style="margin-top:24px;padding-top:20px;border-top:1px solid #1e1e1e;display:flex;gap:16px;flex-wrap:wrap;">
-      <a href="#" style="font-size:12px;color:#555;text-decoration:none;">이용약관</a>
-      <a href="#" style="font-size:12px;color:#888;text-decoration:none;font-weight:700;">개인정보처리방침</a>
-      <a href="#" style="font-size:12px;color:#555;text-decoration:none;">환불정책</a>
+      <a href="https://teamsparta.notion.site/247d57da1322424d8e8c551df21a048e" target="_blank" style="font-size:12px;color:#555;text-decoration:none;">이용약관</a>
+      <a href="https://teamsparta.notion.site/7b1dc644460946f08bab08b794de685f" target="_blank" style="font-size:12px;color:#888;text-decoration:none;font-weight:700;">개인정보처리방침</a>
+      <a href="https://teamsparta.notion.site/6abff2edf5b04abebeed5c97e194b6f3" target="_blank" style="font-size:12px;color:#555;text-decoration:none;">환불정책</a>
     </div>
     <div style="margin-top:16px;font-size:11px;color:#333;">© 2025 Team Sparta Inc. All rights reserved.</div>
   </div>
@@ -1518,7 +1590,7 @@ section{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:32px 2
     <div class="cta-option-price">199,000원</div>
   </div>
   <div class="cta-option" id="drawerPlus" onclick="selectOption('plus')">
-    <div class="cta-option-left"><strong>AI 만원클럽 PLUS ✨</strong><span>만원클럽 전체 + 온보딩 라이브 3시간</span></div>
+    <div class="cta-option-left"><strong>AI 만원클럽 입문 ✨</strong><span>만원클럽 전체 + 온보딩 라이브 3시간</span></div>
     <div class="cta-option-price">249,000원</div>
   </div>
   <button id="drawerCtaBtn" style="width:100%;padding:15px;border-radius:12px;background:var(--lime);color:var(--black);font-size:16px;font-weight:800;border:none;cursor:pointer;display:none;margin-top:4px;" onclick="goToPayment()">신청하기 →</button>
@@ -1571,14 +1643,12 @@ function selectOption(opt){
   document.getElementById('drawerPlus').style.borderColor = opt==='plus' ? 'var(--lime)' : '#333';
   const btn=document.getElementById('drawerCtaBtn');
   btn.style.display='block';
-  btn.textContent= opt==='basic' ? 'AI 만원클럽 신청하기 →' : 'AI 만원클럽 PLUS 신청하기 →';
+  btn.textContent= opt==='basic' ? 'AI 만원클럽 신청하기 →' : 'AI 만원클럽 입문 신청하기 →';
 }
 
 function goToPayment(){
   if(!selectedOption) return;
-  const url=PAYMENT_URLS[selectedOption];
-  if(url && url!=='#') window.location.href=url;
-  else alert('결제 링크 준비 중입니다!');
+  window.location.href='form.html?option='+selectedOption;
 }
 
 function toggleFaq(el){
