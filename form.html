@@ -159,7 +159,6 @@ const params = new URLSearchParams(window.location.search);
 const selectedProductOption = params.get('option') || 'basic';
 let currentStep = 1;
 let selectedClaude = -1;
-let savedRowIndex = -1;
 
 window.onload = function(){
   document.getElementById('optionBadgeText').textContent =
@@ -221,37 +220,15 @@ function handleNext(){
 }
 
 function goToStep2(){
-  const btn = document.getElementById('btnNext');
-  btn.disabled = true;
-  btn.textContent = '저장 중...';
-
-  const data = {
-    action:   'step1',
-    datetime: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'}),
-    name:     document.getElementById('inputName').value.trim(),
-    phone:    document.getElementById('inputPhone').value.trim(),
-    email:    document.getElementById('inputEmail').value.trim(),
-    option:   selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽',
-    idea:     document.getElementById('inputIdea').value.trim() || '-'
-  };
-
-  fetch(SHEET_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
-  }).then(r=>r.json()).then(res=>{
-    if(res.rowIndex) savedRowIndex = res.rowIndex;
-  }).catch(()=>{}).finally(()=>{
-    document.getElementById('step1').classList.remove('active');
-    document.getElementById('step2').classList.add('active');
-    document.getElementById('progressFill').style.width = '100%';
-    document.getElementById('progressLabel').textContent = '2 / 2';
-    btn.textContent = '결제하기 →';
-    btn.disabled = true;
-    document.getElementById('backBtn').style.visibility = 'visible';
-    currentStep = 2;
-    window.scrollTo(0,0);
-  });
+  document.getElementById('step1').classList.remove('active');
+  document.getElementById('step2').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = '2 / 2';
+  document.getElementById('btnNext').textContent = '결제하기 →';
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('backBtn').style.visibility = 'visible';
+  currentStep = 2;
+  window.scrollTo(0,0);
 }
 
 function goToPayment(){
@@ -260,14 +237,19 @@ function goToPayment(){
   btn.textContent = '처리 중...';
 
   const data = {
-    action:   'step2',
-    rowIndex: savedRowIndex,
+    datetime: new Date().toLocaleString('ko-KR', {timeZone:'Asia/Seoul'}),
+    name:     document.getElementById('inputName').value.trim(),
+    phone:    document.getElementById('inputPhone').value.trim(),
+    email:    document.getElementById('inputEmail').value.trim(),
+    option:   selectedProductOption === 'plus' ? 'AI 만원클럽 입문반' : 'AI 만원클럽',
+    idea:     document.getElementById('inputIdea').value.trim() || '-',
     claude:   selectedClaude >= 0 ? CLAUDE_LABELS[selectedClaude] : '-'
   };
 
   fetch(SHEET_URL, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
     body: JSON.stringify(data)
   }).catch(()=>{}).finally(()=>{
     const url = PAYMENT_URLS[selectedProductOption];
