@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 만원클럽 신청하기</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--lime:#c8ff00;--black:#0d0d0d;--white:#ffffff;}
+body{background:var(--black);color:var(--white);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-height:100vh;}
+
+/* 상단 바 */
+.top-bar{position:sticky;top:0;z-index:100;background:#0d0d0d;border-bottom:1px solid #222;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;max-width:100%;}
+.top-bar .logo{font-size:15px;font-weight:800;color:var(--lime);}
+.top-bar .close-btn{font-size:20px;color:#666;cursor:pointer;background:none;border:none;line-height:1;}
+
+/* 진행 바 */
+.progress-wrap{max-width:480px;margin:0 auto;padding:20px 24px 0;}
+.progress-bar{height:3px;background:#222;border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--lime);border-radius:2px;transition:width 0.4s ease;}
+.progress-label{font-size:12px;color:#555;margin-top:8px;text-align:right;}
+
+/* 메인 컨텐츠 */
+.form-wrap{max-width:480px;margin:0 auto;padding:32px 24px 120px;}
+
+/* 스텝 */
+.step{display:none;}
+.step.active{display:block;}
+
+.step-title{font-size:26px;font-weight:900;line-height:1.3;margin-bottom:8px;}
+.step-title span{color:var(--lime);}
+.step-desc{font-size:14px;color:#888;margin-bottom:36px;line-height:1.6;}
+
+/* 인풋 */
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:13px;font-weight:700;color:#aaa;margin-bottom:8px;}
+.field input{width:100%;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;font-size:16px;color:var(--white);outline:none;transition:border-color 0.2s;font-family:inherit;}
+.field input:focus{border-color:var(--lime);}
+.field input::placeholder{color:#444;}
+
+/* 클로드코드 선택 */
+.claude-options{display:flex;flex-direction:column;gap:12px;margin-bottom:8px;}
+.claude-opt{background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:14px;padding:18px 20px;cursor:pointer;transition:border-color 0.2s,background 0.2s;display:flex;align-items:flex-start;gap:14px;}
+.claude-opt:active{opacity:0.85;}
+.claude-opt.selected{border-color:var(--lime);background:rgba(200,255,0,0.06);}
+.claude-opt .opt-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+.claude-opt .opt-body{}
+.claude-opt .opt-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.claude-opt .opt-desc{font-size:13px;color:#777;line-height:1.5;}
+
+/* 플러스 추천 배너 */
+.plus-banner{background:rgba(200,255,0,0.08);border:1.5px solid rgba(200,255,0,0.3);border-radius:14px;padding:16px 18px;margin-top:16px;display:none;}
+.plus-banner.show{display:flex;gap:12px;align-items:flex-start;}
+.plus-banner .pb-icon{font-size:22px;flex-shrink:0;}
+.plus-banner .pb-text{font-size:13px;color:#ccc;line-height:1.6;}
+.plus-banner .pb-text strong{color:var(--lime);}
+
+/* 선택된 상품 뱃지 */
+.option-badge{display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;color:#ccc;margin-bottom:28px;}
+.option-badge .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);}
+
+/* 하단 버튼 */
+.btn-wrap{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(to top, #0d0d0d 70%, transparent);z-index:50;}
+.btn-next{width:100%;max-width:480px;margin:0 auto;display:block;background:var(--lime);color:var(--black);font-size:17px;font-weight:800;padding:16px;border-radius:14px;border:none;cursor:pointer;transition:opacity 0.2s;}
+.btn-next:disabled{opacity:0.3;cursor:default;}
+.btn-next.loading{opacity:0.6;}
+
+/* 완료 스텝 */
+.complete-wrap{text-align:center;padding-top:40px;}
+.complete-icon{font-size:64px;margin-bottom:24px;}
+.complete-title{font-size:26px;font-weight:900;margin-bottom:12px;}
+.complete-desc{font-size:15px;color:#888;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<!-- 상단 바 -->
+<div class="top-bar">
+  <div class="logo">AI 만원클럽</div>
+  <button class="close-btn" onclick="history.back()">✕</button>
+</div>
+
+<!-- 진행 바 -->
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:50%"></div></div>
+  <div class="progress-label" id="progressLabel">1 / 2</div>
+</div>
+
+<!-- 폼 영역 -->
+<div class="form-wrap">
+
+  <!-- 스텝 1: 기본 정보 -->
+  <div class="step active" id="step1">
+    <div class="step-title">신청 정보를<br>입력해주세요</div>
+    <div class="step-desc">해당 정보로 AI 만원클럽 신청 관련 안내를 드려요.</div>
+
+    <div class="field">
+      <label>이름</label>
+      <input type="text" id="inputName" placeholder="홍길동" />
+    </div>
+    <div class="field">
+      <label>전화번호</label>
+      <input type="tel" id="inputPhone" placeholder="010-0000-0000" />
+    </div>
+    <div class="field">
+      <label>이메일</label>
+      <input type="email" id="inputEmail" placeholder="example@email.com" />
+    </div>
+  </div>
+
+  <!-- 스텝 2: 클로드코드 경험 -->
+  <div class="step" id="step2">
+    <div class="step-title">클로드코드<br>경험이 있으신가요?</div>
+    <div class="step-desc">경험 수준에 맞는 옵션을 추천해드릴게요.</div>
+
+    <div id="optionBadge" class="option-badge">
+      <div class="badge-dot"></div>
+      <span id="optionBadgeText">AI 만원클럽</span>
+    </div>
+
+    <div class="claude-options">
+      <div class="claude-opt" id="opt0" onclick="selectClaude(0)">
+        <div class="opt-icon">🌱</div>
+        <div class="opt-body">
+          <div class="opt-title">클로드코드 사용은 처음이에요</div>
+          <div class="opt-desc">아직 클로드코드를 설치하거나 사용해본 적 없어요</div>
+        </div>
+      </div>
+      <div class="claude-opt" id="opt1" onclick="selectClaude(1)">
+        <div class="opt-icon">✨</div>
+        <div class="opt-body">
+          <div class="opt-title">클로드코드를 써본 적이 있어요</div>
+          <div class="opt-desc">설치하고 몇 번 사용해본 경험이 있어요</div>
+        </div>
+      </div>
+      <div class="claude-opt" id="opt2" onclick="selectClaude(2)">
+        <div class="opt-icon">🚀</div>
+        <div class="opt-body">
+          <div class="opt-title">클로드코드로 다양한 작업을 해봤어요</div>
+          <div class="opt-desc">프로젝트나 서비스를 만들어본 경험이 있어요</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 플러스 추천 배너 -->
+    <div class="plus-banner" id="plusBanner">
+      <div class="pb-icon">💡</div>
+      <div class="pb-text"><strong>AI 만원클럽 입문을 추천해요!</strong><br>클로드코드 입문자를 위한 온보딩 교육이 포함된 PLUS 옵션이 더 잘 맞을 것 같아요. 개강 전 3시간 라이브 세션으로 환경 세팅부터 기본 사용법까지 다져드립니다.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 하단 버튼 -->
+<div class="btn-wrap">
+  <button class="btn-next" id="btnNext" onclick="handleNext()" disabled>다음</button>
+</div>
+
+<script>
+// URL에서 option 파라미터 읽기
+const params = new URLSearchParams(window.location.search);
+let selectedProductOption = params.get('option') || 'basic';
+let currentStep = 1;
+let selectedClaude = -1;
+
+const PAYMENT_URLS = { basic: '#', plus: '#' };
+
+// 초기화
+window.onload = function(){
+  document.getElementById('optionBadgeText').textContent =
+    selectedProductOption === 'plus' ? 'AI 만원클럽 입문' : 'AI 만원클럽';
+  setupStep1Validation();
+};
+
+// 스텝1 입력 감지
+function setupStep1Validation(){
+  ['inputName','inputPhone','inputEmail'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', checkStep1);
+  });
+  // 전화번호 자동 하이픈
+  document.getElementById('inputPhone').addEventListener('input', function(){
+    let v = this.value.replace(/\D/g,'');
+    if(v.length>3 && v.length<=7) v = v.slice(0,3)+'-'+v.slice(3);
+    else if(v.length>7) v = v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);
+    this.value = v;
+    checkStep1();
+  });
+}
+
+function checkStep1(){
+  const name = document.getElementById('inputName').value.trim();
+  const phone = document.getElementById('inputPhone').value.trim();
+  const email = document.getElementById('inputEmail').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phoneOk = phone.length >= 10;
+  document.getElementById('btnNext').disabled = !(name && phoneOk && emailOk);
+}
+
+// 클로드코드 선택
+function selectClaude(idx){
+  selectedClaude = idx;
+  document.querySelectorAll('.claude-opt').forEach((el,i)=>{
+    el.classList.toggle('selected', i===idx);
+  });
+  // 처음이에요 선택 시 플러스 추천
+  const banner = document.getElementById('plusBanner');
+  if(idx === 0){
+    banner.classList.add('show');
+    selectedProductOption = 'plus';
+    document.getElementById('optionBadgeText').textContent = 'AI 만원클럽 입문';
+  } else {
+    banner.classList.remove('show');
+  }
+  document.getElementById('btnNext').disabled = false;
+}
+
+// 다음 버튼
+function handleNext(){
+  if(currentStep === 1){
+    goToStep2();
+  } else if(currentStep === 2){
+    goToPayment();
+  }
+}
+
+function goToStep2(){
+  document.getElementById('step1').classList.remove('active');
+  document.getElementById('step2').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = '2 / 2';
+  document.getElementById('btnNext').textContent = '결제하기 →';
+  document.getElementById('btnNext').disabled = true;
+  currentStep = 2;
+  window.scrollTo(0,0);
+}
+
+function goToPayment(){
+  const url = PAYMENT_URLS[selectedProductOption];
+  if(url && url !== '#'){
+    window.location.href = url;
+  } else {
+    alert('결제 링크 준비 중입니다!\n곧 오픈될 예정이에요 🙏');
+  }
+}
+</script>
+</body>
+</html>
